@@ -19,7 +19,7 @@
 - `Fixes` interface property names have no `fix` prefix (e.g. `missingProperties`, not `fixMissingProperties`) -- the new flags are `glimmerElementSignature` and `glimmerBlocksSignature`. The fixer directories/exported functions keep the `fix` prefix (`fixGlimmerElementSignature`, `fixGlimmerBlocksSignature`), matching every existing fixer.
 - No comments explaining _what_ code does; only add a comment where the _why_ is non-obvious.
 - Every new built-in fixer needs: an entry in `builtInFileMutators` (alphabetically ordered, matching existing convention), a `Fixes` flag + default (`false`) in `fillOutRawOptions.ts`, a `docs/Fixes.md` entry + top-JSON-block entry, a `README.md` under its own directory (matching `fixMissingProperties/README.md`'s structure: title, one-line description, "Use Cases", "Configuration", "Mutations" with diff examples), and an end-to-end fixture test under `test/cases/fixes/<flagName>/` run via `test/<FixerName>.test.ts` + `runMutationTest`.
-- Verified via a real scratch install of `@glint/ember-tsc@1.10.0` + `typescript@5.9.3` during planning (not read off `.d.ts` alone): `rewriteModule` returns a **non-null** `TransformedModule` with a populated `.errors` array for _recoverable_ template parse errors (e.g. `<template>{{#each}}</template>`) -- it only returns `null` when there is no template at all in the script (confirmed with `export const x = 1;`). Code must not assume `null` means "malformed template."
+- Verified via a real scratch install of `@glint/ember-tsc@1.8.14` + `typescript@5.9.3` during planning (pinned to `1.8.14` rather than the newer `1.10.0` because `1.10.0` was published the same day as this plan and is blocked by the sandbox's supply-chain `minimumReleaseAge` protection; `1.8.14`, a week old, was independently re-verified during planning to produce byte-identical `rewriteModule` output for `applySplattributes`/`yieldToBlock`/`getOriginalOffset`) (not read off `.d.ts` alone): `rewriteModule` returns a **non-null** `TransformedModule` with a populated `.errors` array for _recoverable_ template parse errors (e.g. `<template>{{#each}}</template>`) -- it only returns `null` when there is no template at all in the script (confirmed with `export const x = 1;`). Code must not assume `null` means "malformed template."
 - Verified real transformed-output shapes (do not re-derive these from first principles -- they are copied verbatim from actual `rewriteModule` output during planning):
   - An element with `...attributes` produces, in the same lexical block as its `emitElement(...)` call: `__glintDSL__.applySplattributes(__glintRef__.element, __glintY__.element);` where `__glintY__` is that block's `emitElement` result. There is at most one such call per template (Glimmer itself forbids more than one `...attributes` per template), so no disambiguation logic beyond "find the one call" is needed.
   - A `{{yield ...}}` (named or default block) produces a **curried call**: `__glintDSL__.yieldToBlock(__glintRef__, "<blockName>")(<arg0>, <arg1>, ...)`, regardless of what control-flow (`{{#each}}`, `{{#let}}`, etc.) surrounds it -- the yielded arguments are always plain, independently-checkable identifiers by the time they reach this call. No Glimmer-control-flow-aware desugaring logic is needed to read them.
@@ -41,7 +41,7 @@
 - [ ] **Step 1: Add dependencies**
 
 ```bash
-pnpm add @glint/ember-tsc@1.10.0
+pnpm add @glint/ember-tsc@1.8.14
 pnpm add -D @glimmer/component@2.1.1
 ```
 
