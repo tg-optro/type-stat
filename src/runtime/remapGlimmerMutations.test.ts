@@ -51,20 +51,25 @@ describe("remapGlimmerMutations", () => {
 		expect(remapped.range.begin).toBeLessThanOrEqual(rawContents.length);
 	});
 
-	it("recurses into combined (multiple) mutations", () => {
-		const classKeywordOffset = rawContents.indexOf("class");
+	it("recurses into combined (multiple) mutations, remapping both the inner and outer ranges", () => {
+		const applySplattributesOffset =
+			transform.transformedContents.indexOf("applySplattributes");
 		const innerMutation: TextInsertMutation = {
 			insertion: "",
-			range: { begin: classKeywordOffset },
+			range: { begin: applySplattributesOffset },
 			type: "text-insert",
 		};
 		const multipleMutation: Mutations = {
 			mutations: [innerMutation],
-			range: { begin: classKeywordOffset },
+			range: { begin: applySplattributesOffset },
 			type: "multiple",
 		};
 		const [remapped] = remapGlimmerMutations([multipleMutation], transform);
 
 		expect(remapped.type).toBe("multiple");
+		expect(remapped.range.begin).toBeGreaterThanOrEqual(
+			rawContents.indexOf("<template>"),
+		);
+		expect(remapped.range.begin).toBeLessThanOrEqual(rawContents.length);
 	});
 });

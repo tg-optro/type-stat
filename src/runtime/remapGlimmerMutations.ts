@@ -18,6 +18,7 @@ const remapMutation = (
 		const remapped: Mutations = {
 			...mutation,
 			mutations: remapGlimmerMutations(mutation.mutations, transform),
+			range: remapRange(mutation.range, transform),
 		};
 
 		return remapped;
