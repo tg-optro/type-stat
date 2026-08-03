@@ -4,6 +4,7 @@ import { EOL } from "os";
 import { MutationsComplaint } from "../mutators/complaint.js";
 import { FileMutationsRequest, FileMutator } from "../shared/fileMutator.js";
 import { findFirstMutations } from "../shared/runtime.js";
+import { remapGlimmerMutations } from "./remapGlimmerMutations.js";
 
 /**
  * Collects all mutations that should apply to a file.
@@ -21,5 +22,15 @@ export const findMutationsInFile = (
 		mutations = undefined;
 	}
 
-	return mutations;
+	if (mutations === undefined) {
+		return undefined;
+	}
+
+	const transform = request.services.glimmerTransforms.get(
+		request.sourceFile.fileName,
+	);
+
+	return transform === undefined
+		? mutations
+		: remapGlimmerMutations(mutations, transform);
 };
