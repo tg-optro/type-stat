@@ -152,7 +152,7 @@ export const computeGlimmerTransform = (
 	fileName: string,
 	rawContents: string,
 	rootDir: string,
-): TransformedModule | null => {
+): null | TransformedModule => {
 	const glintConfig = createDefaultConfig(ts, rootDir);
 
 	return rewriteModule(
@@ -216,7 +216,10 @@ describe("createLanguageServices with .gts files", () => {
 
 		const services = createLanguageServices({
 			fixes: {} as never,
-			output: { stderr: () => {} } as never,
+			output: {
+				// eslint-disable-next-line @typescript-eslint/no-empty-function
+				stderr: () => {},
+			} as never,
 			package: {
 				directory: packageDirectory,
 				file: "package.json",
@@ -232,8 +235,9 @@ describe("createLanguageServices with .gts files", () => {
 });
 ```
 
+`src/tests/fixtures/glimmerLanguageServices/tsconfig.json`:
+
 ```json
-// src/tests/fixtures/glimmerLanguageServices/tsconfig.json
 {
 	"compilerOptions": {
 		"strict": true,
@@ -243,8 +247,9 @@ describe("createLanguageServices with .gts files", () => {
 }
 ```
 
-```gts
-// src/tests/fixtures/glimmerLanguageServices/highlight.gts
+`src/tests/fixtures/glimmerLanguageServices/highlight.gts`:
+
+```text
 class Highlight {
 	<template>
 		<div ...attributes>{{yield}}</div>
@@ -470,7 +475,10 @@ describe("remapGlimmerMutations", () => {
 		"highlight.gts",
 		rawContents,
 		rootDir,
-	)!;
+	);
+	if (transform === null) {
+		throw new Error("Expected a non-null transform");
+	}
 
 	it("passes through positions in the pass-through (identity-mapped) region unchanged", () => {
 		const classKeywordOffset = rawContents.indexOf("class");
@@ -496,9 +504,9 @@ describe("remapGlimmerMutations", () => {
 		const [remapped] = remapGlimmerMutations(
 			[
 				{
+					insertion: "",
 					range: { begin: applySplattributesOffset },
 					type: "text-insert",
-					insertion: "",
 				},
 			],
 			transform,
@@ -517,9 +525,9 @@ describe("remapGlimmerMutations", () => {
 				{
 					mutations: [
 						{
+							insertion: "",
 							range: { begin: classKeywordOffset },
 							type: "text-insert",
-							insertion: "",
 						},
 					],
 					range: { begin: classKeywordOffset },
@@ -543,8 +551,8 @@ Expected: FAIL with "Cannot find module './remapGlimmerMutations.js'"
 
 ```ts
 // src/runtime/remapGlimmerMutations.ts
-import { type Mutation, type MutationRange } from "automutate";
 import { type TransformedModule } from "@glint/ember-tsc/transform";
+import { type Mutation, type MutationRange } from "automutate";
 
 interface MultipleMutation extends Mutation {
 	readonly mutations: readonly Mutation[];
@@ -739,12 +747,11 @@ Expected: PASS
 
 ```ts
 // src/mutations/glimmerSignatures/patchSignatureMember.test.ts
-import { combineMutations } from "automutate";
 import ts from "typescript";
 import { describe, expect, it } from "vitest";
 
-import { FileMutationsRequest } from "../../shared/fileMutator.js";
 import { FileInfoCache } from "../../shared/FileInfoCache.js";
+import { FileMutationsRequest } from "../../shared/fileMutator.js";
 import { NameGenerator } from "../../shared/NameGenerator.js";
 import { findComponentClassDeclaration } from "./findComponentClassDeclaration.js";
 import { patchSignatureMember } from "./patchSignatureMember.js";
@@ -769,7 +776,11 @@ const createRequest = (sourceText: string): FileMutationsRequest => {
 	};
 
 	const program = ts.createProgram([fileName], {}, compilerHost);
-	const sourceFile = program.getSourceFile(fileName)!;
+	const sourceFile = program.getSourceFile(fileName);
+	if (sourceFile === undefined) {
+		throw new Error("Expected a source file");
+	}
+
 	const filteredNodes = new Set<ts.Node>();
 	const services = {
 		glimmerTransforms: new Map(),
@@ -801,15 +812,15 @@ const applyMutation = (
 			? (
 					mutation as unknown as {
 						mutations: {
-							range: { begin: number; end?: number };
 							insertion: string;
+							range: { begin: number; end?: number };
 						}[];
 					}
 				).mutations
 			: [
 					mutation as unknown as {
-						range: { begin: number; end?: number };
 						insertion: string;
+						range: { begin: number; end?: number };
 					},
 				];
 
@@ -829,7 +840,10 @@ describe("patchSignatureMember", () => {
 	it("generates a named interface when the class has no Signature", () => {
 		const sourceText = `class Highlight extends Component {}`;
 		const request = createRequest(sourceText);
-		const componentClass = findComponentClassDeclaration(request.sourceFile)!;
+		const componentClass = findComponentClassDeclaration(request.sourceFile);
+		if (componentClass === undefined) {
+			throw new Error("Expected a component class");
+		}
 
 		const mutation = patchSignatureMember(
 			request,
@@ -846,7 +860,10 @@ describe("patchSignatureMember", () => {
 	it("adds a missing member to an existing inline Signature literal", () => {
 		const sourceText = `class Highlight extends Component<{ Args: {} }> {}`;
 		const request = createRequest(sourceText);
-		const componentClass = findComponentClassDeclaration(request.sourceFile)!;
+		const componentClass = findComponentClassDeclaration(request.sourceFile);
+		if (componentClass === undefined) {
+			throw new Error("Expected a component class");
+		}
 
 		const mutation = patchSignatureMember(
 			request,
@@ -863,7 +880,10 @@ describe("patchSignatureMember", () => {
 	it("replaces a differing existing member's type in an inline Signature literal", () => {
 		const sourceText = `class Highlight extends Component<{ Element: HTMLSpanElement }> {}`;
 		const request = createRequest(sourceText);
-		const componentClass = findComponentClassDeclaration(request.sourceFile)!;
+		const componentClass = findComponentClassDeclaration(request.sourceFile);
+		if (componentClass === undefined) {
+			throw new Error("Expected a component class");
+		}
 
 		const mutation = patchSignatureMember(
 			request,
@@ -880,7 +900,10 @@ describe("patchSignatureMember", () => {
 	it("does not mutate when the existing member's type already matches", () => {
 		const sourceText = `class Highlight extends Component<{ Element: HTMLDivElement }> {}`;
 		const request = createRequest(sourceText);
-		const componentClass = findComponentClassDeclaration(request.sourceFile)!;
+		const componentClass = findComponentClassDeclaration(request.sourceFile);
+		if (componentClass === undefined) {
+			throw new Error("Expected a component class");
+		}
 
 		const mutation = patchSignatureMember(
 			request,
@@ -895,7 +918,10 @@ describe("patchSignatureMember", () => {
 	it("patches an existing named interface Signature in place", () => {
 		const sourceText = `interface HighlightSignature { Args: {} }\nclass Highlight extends Component<HighlightSignature> {}`;
 		const request = createRequest(sourceText);
-		const componentClass = findComponentClassDeclaration(request.sourceFile)!;
+		const componentClass = findComponentClassDeclaration(request.sourceFile);
+		if (componentClass === undefined) {
+			throw new Error("Expected a component class");
+		}
 
 		const mutation = patchSignatureMember(
 			request,
@@ -925,13 +951,13 @@ Expected: FAIL with "Cannot find module './patchSignatureMember.js'"
 import { combineMutations, Mutation } from "automutate";
 import ts from "typescript";
 
-import { textInsert, textSwap } from "../text-mutations.js";
 import { FileMutationsRequest } from "../../shared/fileMutator.js";
 import { getStaticNameOfProperty } from "../../shared/names.js";
 import {
 	isNodeWithType,
 	PropertySignatureWithType,
 } from "../../shared/nodeTypes.js";
+import { textInsert, textSwap } from "../text-mutations.js";
 
 export type SignatureMembersNode = ts.InterfaceDeclaration | ts.TypeLiteralNode;
 
@@ -1164,7 +1190,7 @@ export interface Fixes {
 
 In `src/options/fillOutRawOptions.ts`, the `fixes` defaulting block:
 
-```ts
+```text
 fixes: {
 	glimmerBlocksSignature: false,
 	glimmerElementSignature: false,
@@ -1202,8 +1228,9 @@ describe("Glimmer Element Signature", () => {
 });
 ```
 
+`test/cases/fixes/glimmerElementSignature/basic/typestat.json`:
+
 ```json
-// test/cases/fixes/glimmerElementSignature/basic/typestat.json
 {
 	"fixes": {
 		"glimmerElementSignature": true
@@ -1211,8 +1238,9 @@ describe("Glimmer Element Signature", () => {
 }
 ```
 
+`test/cases/fixes/glimmerElementSignature/basic/tsconfig.json`:
+
 ```json
-// test/cases/fixes/glimmerElementSignature/basic/tsconfig.json
 {
 	"compilerOptions": {
 		"strict": true,
@@ -1223,8 +1251,9 @@ describe("Glimmer Element Signature", () => {
 }
 ```
 
-```gts
-// test/cases/fixes/glimmerElementSignature/basic/original.gts
+`test/cases/fixes/glimmerElementSignature/basic/original.gts`:
+
+```text
 import Component from "@glimmer/component";
 
 export default class Highlight extends Component {
@@ -1234,8 +1263,9 @@ export default class Highlight extends Component {
 }
 ```
 
-```gts
-// test/cases/fixes/glimmerElementSignature/basic/expected.gts
+`test/cases/fixes/glimmerElementSignature/basic/expected.gts`:
+
+```text
 import Component from "@glimmer/component";
 
 interface HighlightSignature {
@@ -1601,8 +1631,9 @@ describe("Glimmer Blocks Signature", () => {
 });
 ```
 
+`test/cases/fixes/glimmerBlocksSignature/basic/typestat.json`:
+
 ```json
-// test/cases/fixes/glimmerBlocksSignature/basic/typestat.json
 {
 	"fixes": {
 		"glimmerBlocksSignature": true
@@ -1610,8 +1641,9 @@ describe("Glimmer Blocks Signature", () => {
 }
 ```
 
+`test/cases/fixes/glimmerBlocksSignature/basic/tsconfig.json`:
+
 ```json
-// test/cases/fixes/glimmerBlocksSignature/basic/tsconfig.json
 {
 	"compilerOptions": {
 		"strict": true,
@@ -1622,8 +1654,9 @@ describe("Glimmer Blocks Signature", () => {
 }
 ```
 
-```gts
-// test/cases/fixes/glimmerBlocksSignature/basic/original.gts
+`test/cases/fixes/glimmerBlocksSignature/basic/original.gts`:
+
+```text
 import Component from "@glimmer/component";
 
 interface HighlightArgs {
@@ -1645,8 +1678,9 @@ export default class Highlight extends Component<{ Args: HighlightArgs }> {
 }
 ```
 
-```gts
-// test/cases/fixes/glimmerBlocksSignature/basic/expected.gts
+`test/cases/fixes/glimmerBlocksSignature/basic/expected.gts`:
+
+```text
 import Component from "@glimmer/component";
 
 interface HighlightArgs {
@@ -1709,7 +1743,7 @@ export const findYieldToBlockCalls = (
 
 const tryReadYieldToBlockCall = (
 	node: ts.Node,
-): YieldToBlockCall | undefined => {
+): undefined | YieldToBlockCall => {
 	if (!ts.isCallExpression(node) || !ts.isCallExpression(node.expression)) {
 		return undefined;
 	}
