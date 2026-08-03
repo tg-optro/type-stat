@@ -92,12 +92,12 @@ Three pieces:
 New module, `src/services/glimmer/index.ts` (alongside the existing `src/services/language.ts`):
 
 ```ts
-isGlimmerFile(fileName: string): boolean; // /\.g(?:js|ts)$/i
-getGlimmerTransform(
+declare function getGlimmerTransform(
 	fileName: string,
 	rawContents: string,
 	options: TypeStatOptions,
-): TransformedModule | null;
+): null | TransformedModule;
+declare function isGlimmerFile(fileName: string): boolean; // /\.g(?:js|ts)$/i
 ```
 
 - **`GlintEnvironment` construction:** `createDefaultConfig(ts, options.package.directory).environment`,
