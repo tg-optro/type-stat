@@ -118,6 +118,14 @@ Any TypeStat user relying on `fixes.noImplicitAny` to add types to untyped class
 properties (a documented use case per `fixNoImplicitAny/README.md`) gets silent no-ops for
 every property declaration. Parameters and variable declarations are unaffected.
 
+## Skipped regression test
+
+`test/glimmerComponents.test.ts` has a test, `"infers a @tracked property's type from usage
+evidence"`, currently marked `it.skip` with a comment pointing back to this file. Its
+fixture (`test/cases/fixes/glimmerComponents/tracked/`) already has `expected.gts` set to
+the correct target output (`@tracked count: number`), so once this bug is fixed, that test
+can simply be un-skipped -- no further fixture changes should be needed.
+
 ## Suggested fix
 
 Split the enum into the correct, distinct codes and select by node kind rather than
