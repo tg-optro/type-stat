@@ -124,7 +124,7 @@ describe("patchSignatureMember", () => {
 		);
 
 		expect(applyMutation(sourceText, mutation)).toBe(
-			`class Highlight extends Component<{ Args: {} Element: HTMLDivElement;\n}> {}`,
+			`class Highlight extends Component<{ Args: {};\n\tElement: HTMLDivElement;\n }> {}`,
 		);
 	});
 
@@ -182,7 +182,7 @@ describe("patchSignatureMember", () => {
 		);
 
 		expect(applyMutation(sourceText, mutation)).toBe(
-			`interface HighlightSignature { Args: {} Element: HTMLDivElement;\n}\nclass Highlight extends Component<HighlightSignature> {}`,
+			`interface HighlightSignature { Args: {};\n\tElement: HTMLDivElement;\n }\nclass Highlight extends Component<HighlightSignature> {}`,
 		);
 	});
 });

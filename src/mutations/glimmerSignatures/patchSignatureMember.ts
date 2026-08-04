@@ -129,9 +129,15 @@ const patchExistingSignatureMember = (
 	const existingMember = findExistingMember(node, memberName);
 
 	if (existingMember === undefined) {
+		const { insertionPoint, needsLeadingSeparator } = getEndInsertionPoint(
+			request.sourceFile,
+			node,
+		);
+		const separator = needsLeadingSeparator ? ";\n\t" : "";
+
 		return textInsert(
-			`${memberName}: ${newTypeText};\n`,
-			getEndInsertionPoint(node),
+			`${separator}${memberName}: ${newTypeText};\n`,
+			insertionPoint,
 		);
 	}
 
@@ -167,11 +173,23 @@ const findExistingMember = (
 	return undefined;
 };
 
-const getEndInsertionPoint = (node: SignatureMembersNode): number => {
+const getEndInsertionPoint = (
+	sourceFile: ts.SourceFile,
+	node: SignatureMembersNode,
+): { insertionPoint: number; needsLeadingSeparator: boolean } => {
 	if (node.members.length === 0) {
-		return node.end - 1;
+		return { insertionPoint: node.end - 1, needsLeadingSeparator: false };
 	}
 
 	const lastMember = node.members[node.members.length - 1];
-	return Math.min(lastMember.end + 1, node.end);
+	const lastCharacter = sourceFile.text[lastMember.end - 1];
+	const hasTrailingSeparator = lastCharacter === ";" || lastCharacter === ",";
+
+	return {
+		insertionPoint: Math.min(
+			lastMember.end + (hasTrailingSeparator ? 1 : 0),
+			node.end,
+		),
+		needsLeadingSeparator: !hasTrailingSeparator,
+	};
 };
