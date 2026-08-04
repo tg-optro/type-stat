@@ -78,7 +78,7 @@ export const createFileRenamesProvider = (allModifiedFiles: Set<string>) => {
 	);
 };
 
-const javaScriptExtensionMatcher = /\.(?:c|m)?jsx?/i;
+const javaScriptExtensionMatcher = /\.[cgm]?jsx?/i;
 
-const fileNameIsJavaScript = (fileName: string) =>
+export const fileNameIsJavaScript = (fileName: string) =>
 	javaScriptExtensionMatcher.test(fileName);
