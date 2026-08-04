@@ -20,6 +20,14 @@ describe("Generic classes (existing fixers, no regression)", () => {
 		expect(options).toMatchSnapshot("options");
 	}, 10000);
 
+	// This isn't a TypeStat gap so much as a TypeScript one: no fixer here
+	// adds a return type from scratch (fixIncompleteReturnTypes only widens
+	// an *existing* annotation), and more fundamentally, TypeScript's own
+	// language service offers zero code fixes for the TS7023 diagnostic this
+	// getter triggers (verified directly via getCodeFixesAtPosition against
+	// this exact fixture -- it returns []). There's no suggested fix for
+	// TypeStat to relay, so "untouched" is the correct, permanent expectation
+	// here, not a bug to pre-encode a future fix for.
 	it("leaves a circularly-typed instance getter untouched", async () => {
 		const caseDir = path.join(
 			import.meta.dirname,
