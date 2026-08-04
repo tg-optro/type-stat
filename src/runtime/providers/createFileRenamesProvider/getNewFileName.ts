@@ -11,6 +11,13 @@ export const getNewFileName = async (
 		oldFileName.length - oldExtension.length,
 	);
 
+	// .gjs carries a Glimmer <template> tag, so it can only ever become .gts --
+	// forcing it to plain .ts/.tsx per a "ts"/"tsx" setting would silently
+	// strip its ability to contain templates.
+	if (oldExtension.toLowerCase() === ".gjs") {
+		return `${beforeExtension}.gts`;
+	}
+
 	if (typeof renameExtensions === "string") {
 		return `${beforeExtension}.${renameExtensions}`;
 	}
