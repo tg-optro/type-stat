@@ -1,0 +1,461 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`Generic classes (existing fixers, no regression) > infers a constructor's parameter type from call-site usage > options 1`] = `
+"[
+  {
+    "cleanups": {
+      "suppressTypeErrors": false
+    },
+    "files": {
+      "above": "",
+      "below": "",
+      "renameExtensions": false
+    },
+    "filters": [],
+    "fixes": {
+      "glimmerBlocksSignature": false,
+      "glimmerElementSignature": false,
+      "importExtensions": true,
+      "incompleteTypes": true,
+      "missingProperties": true,
+      "noImplicitAny": true,
+      "noImplicitThis": true,
+      "noInferableTypes": true,
+      "strictNonNullAssertions": true
+    },
+    "hints": {
+      "react": {
+        "propTypes": "whenRequired",
+        "propTypesOptionality": "asWritten"
+      }
+    },
+    "include": [
+      "<rootDir>/actual.ts"
+    ],
+    "mutators": [
+      [
+        "fixGlimmerBlocksSignature",
+        null
+      ],
+      [
+        "fixGlimmerElementSignature",
+        null
+      ],
+      [
+        "fixImportExtensions",
+        null
+      ],
+      [
+        "fixIncompleteTypes",
+        null
+      ],
+      [
+        "fixMissingProperties",
+        null
+      ],
+      [
+        "fixNoImplicitAny",
+        null
+      ],
+      [
+        "fixNoImplicitThis",
+        null
+      ],
+      [
+        "fixNoInferableTypes",
+        null
+      ],
+      [
+        "fixStrictNonNullAssertions",
+        null
+      ]
+    ],
+    "output": {},
+    "package": {
+      "directory": "<rootDir>",
+      "file": "<rootDir>/package.json"
+    },
+    "parsedTsConfig": {
+      "options": {
+        "strict": true,
+        "configFilePath": "<rootDir>/tsconfig.json",
+        "noEmit": true,
+        "noImplicitAny": true,
+        "noImplicitThis": true,
+        "strictNullChecks": true
+      },
+      "fileNames": [
+        "<rootDir>/actual.ts"
+      ],
+      "typeAcquisition": {
+        "enable": false,
+        "include": [],
+        "exclude": []
+      },
+      "raw": {
+        "compilerOptions": {
+          "strict": true
+        },
+        "files": [
+          "actual.ts"
+        ]
+      },
+      "errors": [],
+      "wildcardDirectories": {},
+      "compileOnSave": false
+    },
+    "postProcess": {
+      "shell": []
+    },
+    "projectPath": "<rootDir>/tsconfig.json",
+    "types": {
+      "strictNullChecks": true
+    }
+  }
+]"
+`;
+
+exports[`Generic classes (existing fixers, no regression) > infers an instance method's parameter type from call-site usage > options 1`] = `
+"[
+  {
+    "cleanups": {
+      "suppressTypeErrors": false
+    },
+    "files": {
+      "above": "",
+      "below": "",
+      "renameExtensions": false
+    },
+    "filters": [],
+    "fixes": {
+      "glimmerBlocksSignature": false,
+      "glimmerElementSignature": false,
+      "importExtensions": true,
+      "incompleteTypes": true,
+      "missingProperties": true,
+      "noImplicitAny": true,
+      "noImplicitThis": true,
+      "noInferableTypes": true,
+      "strictNonNullAssertions": true
+    },
+    "hints": {
+      "react": {
+        "propTypes": "whenRequired",
+        "propTypesOptionality": "asWritten"
+      }
+    },
+    "include": [
+      "<rootDir>/actual.ts"
+    ],
+    "mutators": [
+      [
+        "fixGlimmerBlocksSignature",
+        null
+      ],
+      [
+        "fixGlimmerElementSignature",
+        null
+      ],
+      [
+        "fixImportExtensions",
+        null
+      ],
+      [
+        "fixIncompleteTypes",
+        null
+      ],
+      [
+        "fixMissingProperties",
+        null
+      ],
+      [
+        "fixNoImplicitAny",
+        null
+      ],
+      [
+        "fixNoImplicitThis",
+        null
+      ],
+      [
+        "fixNoInferableTypes",
+        null
+      ],
+      [
+        "fixStrictNonNullAssertions",
+        null
+      ]
+    ],
+    "output": {},
+    "package": {
+      "directory": "<rootDir>",
+      "file": "<rootDir>/package.json"
+    },
+    "parsedTsConfig": {
+      "options": {
+        "strict": true,
+        "configFilePath": "<rootDir>/tsconfig.json",
+        "noEmit": true,
+        "noImplicitAny": true,
+        "noImplicitThis": true,
+        "strictNullChecks": true
+      },
+      "fileNames": [
+        "<rootDir>/actual.ts"
+      ],
+      "typeAcquisition": {
+        "enable": false,
+        "include": [],
+        "exclude": []
+      },
+      "raw": {
+        "compilerOptions": {
+          "strict": true
+        },
+        "files": [
+          "actual.ts"
+        ]
+      },
+      "errors": [],
+      "wildcardDirectories": {},
+      "compileOnSave": false
+    },
+    "postProcess": {
+      "shell": []
+    },
+    "projectPath": "<rootDir>/tsconfig.json",
+    "types": {
+      "strictNullChecks": true
+    }
+  }
+]"
+`;
+
+exports[`Generic classes (existing fixers, no regression) > leaves a self-referential instance getter untouched > options 1`] = `
+"[
+  {
+    "cleanups": {
+      "suppressTypeErrors": false
+    },
+    "files": {
+      "above": "",
+      "below": "",
+      "renameExtensions": false
+    },
+    "filters": [],
+    "fixes": {
+      "glimmerBlocksSignature": false,
+      "glimmerElementSignature": false,
+      "importExtensions": true,
+      "incompleteTypes": true,
+      "missingProperties": true,
+      "noImplicitAny": true,
+      "noImplicitThis": true,
+      "noInferableTypes": true,
+      "strictNonNullAssertions": true
+    },
+    "hints": {
+      "react": {
+        "propTypes": "whenRequired",
+        "propTypesOptionality": "asWritten"
+      }
+    },
+    "include": [
+      "<rootDir>/actual.ts"
+    ],
+    "mutators": [
+      [
+        "fixGlimmerBlocksSignature",
+        null
+      ],
+      [
+        "fixGlimmerElementSignature",
+        null
+      ],
+      [
+        "fixImportExtensions",
+        null
+      ],
+      [
+        "fixIncompleteTypes",
+        null
+      ],
+      [
+        "fixMissingProperties",
+        null
+      ],
+      [
+        "fixNoImplicitAny",
+        null
+      ],
+      [
+        "fixNoImplicitThis",
+        null
+      ],
+      [
+        "fixNoInferableTypes",
+        null
+      ],
+      [
+        "fixStrictNonNullAssertions",
+        null
+      ]
+    ],
+    "output": {},
+    "package": {
+      "directory": "<rootDir>",
+      "file": "<rootDir>/package.json"
+    },
+    "parsedTsConfig": {
+      "options": {
+        "strict": true,
+        "configFilePath": "<rootDir>/tsconfig.json",
+        "noEmit": true,
+        "noImplicitAny": true,
+        "noImplicitThis": true,
+        "strictNullChecks": true
+      },
+      "fileNames": [
+        "<rootDir>/actual.ts"
+      ],
+      "typeAcquisition": {
+        "enable": false,
+        "include": [],
+        "exclude": []
+      },
+      "raw": {
+        "compilerOptions": {
+          "strict": true
+        },
+        "files": [
+          "actual.ts"
+        ]
+      },
+      "errors": [],
+      "wildcardDirectories": {},
+      "compileOnSave": false
+    },
+    "postProcess": {
+      "shell": []
+    },
+    "projectPath": "<rootDir>/tsconfig.json",
+    "types": {
+      "strictNullChecks": true
+    }
+  }
+]"
+`;
+
+exports[`Generic classes (existing fixers, no regression) > leaves an untyped instance field untouched (see bug report) > options 1`] = `
+"[
+  {
+    "cleanups": {
+      "suppressTypeErrors": false
+    },
+    "files": {
+      "above": "",
+      "below": "",
+      "renameExtensions": false
+    },
+    "filters": [],
+    "fixes": {
+      "glimmerBlocksSignature": false,
+      "glimmerElementSignature": false,
+      "importExtensions": true,
+      "incompleteTypes": true,
+      "missingProperties": true,
+      "noImplicitAny": true,
+      "noImplicitThis": true,
+      "noInferableTypes": true,
+      "strictNonNullAssertions": true
+    },
+    "hints": {
+      "react": {
+        "propTypes": "whenRequired",
+        "propTypesOptionality": "asWritten"
+      }
+    },
+    "include": [
+      "<rootDir>/actual.ts"
+    ],
+    "mutators": [
+      [
+        "fixGlimmerBlocksSignature",
+        null
+      ],
+      [
+        "fixGlimmerElementSignature",
+        null
+      ],
+      [
+        "fixImportExtensions",
+        null
+      ],
+      [
+        "fixIncompleteTypes",
+        null
+      ],
+      [
+        "fixMissingProperties",
+        null
+      ],
+      [
+        "fixNoImplicitAny",
+        null
+      ],
+      [
+        "fixNoImplicitThis",
+        null
+      ],
+      [
+        "fixNoInferableTypes",
+        null
+      ],
+      [
+        "fixStrictNonNullAssertions",
+        null
+      ]
+    ],
+    "output": {},
+    "package": {
+      "directory": "<rootDir>",
+      "file": "<rootDir>/package.json"
+    },
+    "parsedTsConfig": {
+      "options": {
+        "strict": true,
+        "configFilePath": "<rootDir>/tsconfig.json",
+        "noEmit": true,
+        "noImplicitAny": true,
+        "noImplicitThis": true,
+        "strictNullChecks": true
+      },
+      "fileNames": [
+        "<rootDir>/actual.ts"
+      ],
+      "typeAcquisition": {
+        "enable": false,
+        "include": [],
+        "exclude": []
+      },
+      "raw": {
+        "compilerOptions": {
+          "strict": true
+        },
+        "files": [
+          "actual.ts"
+        ]
+      },
+      "errors": [],
+      "wildcardDirectories": {},
+      "compileOnSave": false
+    },
+    "postProcess": {
+      "shell": []
+    },
+    "projectPath": "<rootDir>/tsconfig.json",
+    "types": {
+      "strictNullChecks": true
+    }
+  }
+]"
+`;
