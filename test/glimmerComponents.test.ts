@@ -26,6 +26,17 @@ describe("Glimmer components (existing fixers, no regression)", () => {
 		expect(options).toMatchSnapshot("options");
 	}, 10000);
 
+	it("adds a missing property declaration in a .gjs class alongside a template", async () => {
+		const caseDir = path.join(
+			import.meta.dirname,
+			"./cases/fixes/glimmerComponents/missingProperty",
+		);
+		const { actualContent, expectedFilePath, options } =
+			await runMutationTest(caseDir);
+		await expect(actualContent).toMatchFileSnapshot(expectedFilePath);
+		expect(options).toMatchSnapshot("options");
+	}, 10000);
+
 	it("leaves a template-only component (no backing class) untouched", async () => {
 		const caseDir = path.join(
 			import.meta.dirname,
