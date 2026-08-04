@@ -13,6 +13,8 @@ exports[`import extensions > options 1`] = `
     },
     "filters": [],
     "fixes": {
+      "glimmerBlocksSignature": false,
+      "glimmerElementSignature": false,
       "importExtensions": true,
       "incompleteTypes": false,
       "missingProperties": false,
@@ -33,6 +35,10 @@ exports[`import extensions > options 1`] = `
       "<rootDir>/foundIndirect/index.ts"
     ],
     "mutators": [
+      [
+        "fixGlimmerElementSignature",
+        null
+      ],
       [
         "fixImportExtensions",
         null

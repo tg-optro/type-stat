@@ -25,8 +25,10 @@ export const runMutationTest = async (
 		fs.readFile(path.join(dirPath, filename), "utf-8");
 
 	const originalFile = path.join(dirPath, originalFileName);
-	const fileNameSuffix = originalFileName.endsWith("x") ? "x" : "";
-	const actualFileName = `actual.ts${fileNameSuffix}`;
+	const originalExtension = originalFileName.slice(
+		originalFileName.indexOf("."),
+	);
+	const actualFileName = `actual${originalExtension}`;
 	const actualFile = path.join(dirPath, actualFileName);
 	// file needs to exists before creating compiler options
 	await fs.copyFile(originalFile, actualFile);
@@ -59,7 +61,7 @@ export const runMutationTest = async (
 	}
 
 	const actualContent = await readFile(actualFileName);
-	const expectFileName = `expected.ts${fileNameSuffix}`;
+	const expectFileName = `expected${originalExtension}`;
 	const expectedFilePath = path.join(dirPath, expectFileName);
 
 	const optionsSnapshot = JSON.stringify(

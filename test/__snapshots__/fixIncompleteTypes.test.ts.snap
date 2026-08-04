@@ -13,6 +13,8 @@ exports[`Incomplete types > Implicit generics > incomplete implicit class generi
     },
     "filters": [],
     "fixes": {
+      "glimmerBlocksSignature": false,
+      "glimmerElementSignature": false,
       "importExtensions": false,
       "incompleteTypes": true,
       "missingProperties": false,
@@ -32,6 +34,10 @@ exports[`Incomplete types > Implicit generics > incomplete implicit class generi
       "<rootDir>/react-like.ts"
     ],
     "mutators": [
+      [
+        "fixGlimmerElementSignature",
+        null
+      ],
       [
         "fixImportExtensions",
         null
@@ -115,6 +121,8 @@ exports[`Incomplete types > Implicit generics > incomplete implicit variable gen
     },
     "filters": [],
     "fixes": {
+      "glimmerBlocksSignature": false,
+      "glimmerElementSignature": false,
       "importExtensions": false,
       "incompleteTypes": true,
       "missingProperties": false,
@@ -133,6 +141,10 @@ exports[`Incomplete types > Implicit generics > incomplete implicit variable gen
       "<rootDir>/actual.ts"
     ],
     "mutators": [
+      [
+        "fixGlimmerElementSignature",
+        null
+      ],
       [
         "fixImportExtensions",
         null
@@ -214,6 +226,8 @@ exports[`Incomplete types > Interface or type literal generics > options 1`] = `
     },
     "filters": [],
     "fixes": {
+      "glimmerBlocksSignature": false,
+      "glimmerElementSignature": false,
       "importExtensions": false,
       "incompleteTypes": true,
       "missingProperties": false,
@@ -232,6 +246,10 @@ exports[`Incomplete types > Interface or type literal generics > options 1`] = `
       "<rootDir>/actual.ts"
     ],
     "mutators": [
+      [
+        "fixGlimmerElementSignature",
+        null
+      ],
       [
         "fixImportExtensions",
         null
@@ -313,6 +331,8 @@ exports[`Incomplete types > Non-generic Interface as Type argument > options 1`]
     },
     "filters": [],
     "fixes": {
+      "glimmerBlocksSignature": false,
+      "glimmerElementSignature": false,
       "importExtensions": false,
       "incompleteTypes": true,
       "missingProperties": false,
@@ -331,6 +351,10 @@ exports[`Incomplete types > Non-generic Interface as Type argument > options 1`]
       "<rootDir>/actual.ts"
     ],
     "mutators": [
+      [
+        "fixGlimmerElementSignature",
+        null
+      ],
       [
         "fixImportExtensions",
         null
@@ -412,6 +436,8 @@ exports[`Incomplete types > React types > React props from prop types > Optional
     },
     "filters": [],
     "fixes": {
+      "glimmerBlocksSignature": false,
+      "glimmerElementSignature": false,
       "importExtensions": false,
       "incompleteTypes": true,
       "missingProperties": false,
@@ -430,6 +456,10 @@ exports[`Incomplete types > React types > React props from prop types > Optional
       "<rootDir>/actual.tsx"
     ],
     "mutators": [
+      [
+        "fixGlimmerElementSignature",
+        null
+      ],
       [
         "fixImportExtensions",
         null
@@ -517,6 +547,8 @@ exports[`Incomplete types > React types > React props from prop types > Optional
     },
     "filters": [],
     "fixes": {
+      "glimmerBlocksSignature": false,
+      "glimmerElementSignature": false,
       "importExtensions": false,
       "incompleteTypes": true,
       "missingProperties": false,
@@ -535,6 +567,10 @@ exports[`Incomplete types > React types > React props from prop types > Optional
       "<rootDir>/actual.tsx"
     ],
     "mutators": [
+      [
+        "fixGlimmerElementSignature",
+        null
+      ],
       [
         "fixImportExtensions",
         null
@@ -622,6 +658,8 @@ exports[`Incomplete types > React types > React props from prop types > Optional
     },
     "filters": [],
     "fixes": {
+      "glimmerBlocksSignature": false,
+      "glimmerElementSignature": false,
       "importExtensions": false,
       "incompleteTypes": true,
       "missingProperties": false,
@@ -640,6 +678,10 @@ exports[`Incomplete types > React types > React props from prop types > Optional
       "<rootDir>/actual.tsx"
     ],
     "mutators": [
+      [
+        "fixGlimmerElementSignature",
+        null
+      ],
       [
         "fixImportExtensions",
         null
@@ -727,6 +769,8 @@ exports[`Incomplete types > React types > React props from prop types > all > op
     },
     "filters": [],
     "fixes": {
+      "glimmerBlocksSignature": false,
+      "glimmerElementSignature": false,
       "importExtensions": false,
       "incompleteTypes": true,
       "missingProperties": false,
@@ -745,6 +789,10 @@ exports[`Incomplete types > React types > React props from prop types > all > op
       "<rootDir>/actual.tsx"
     ],
     "mutators": [
+      [
+        "fixGlimmerElementSignature",
+        null
+      ],
       [
         "fixImportExtensions",
         null
@@ -834,6 +882,8 @@ exports[`Incomplete types > React types > not react props > options 1`] = `
     },
     "filters": [],
     "fixes": {
+      "glimmerBlocksSignature": false,
+      "glimmerElementSignature": false,
       "importExtensions": false,
       "incompleteTypes": true,
       "missingProperties": false,
@@ -852,6 +902,10 @@ exports[`Incomplete types > React types > not react props > options 1`] = `
       "<rootDir>/actual.tsx"
     ],
     "mutators": [
+      [
+        "fixGlimmerElementSignature",
+        null
+      ],
       [
         "fixImportExtensions",
         null
@@ -941,6 +995,8 @@ exports[`Incomplete types > React types > react prop functions from calls > opti
     },
     "filters": [],
     "fixes": {
+      "glimmerBlocksSignature": false,
+      "glimmerElementSignature": false,
       "importExtensions": false,
       "incompleteTypes": true,
       "missingProperties": false,
@@ -959,6 +1015,10 @@ exports[`Incomplete types > React types > react prop functions from calls > opti
       "<rootDir>/actual.tsx"
     ],
     "mutators": [
+      [
+        "fixGlimmerElementSignature",
+        null
+      ],
       [
         "fixImportExtensions",
         null
@@ -1048,6 +1108,8 @@ exports[`Incomplete types > React types > react props from later assignments > o
     },
     "filters": [],
     "fixes": {
+      "glimmerBlocksSignature": false,
+      "glimmerElementSignature": false,
       "importExtensions": false,
       "incompleteTypes": true,
       "missingProperties": false,
@@ -1066,6 +1128,10 @@ exports[`Incomplete types > React types > react props from later assignments > o
       "<rootDir>/actual.tsx"
     ],
     "mutators": [
+      [
+        "fixGlimmerElementSignature",
+        null
+      ],
       [
         "fixImportExtensions",
         null
@@ -1153,6 +1219,8 @@ exports[`Incomplete types > React types > react props from prop uses > options 1
     },
     "filters": [],
     "fixes": {
+      "glimmerBlocksSignature": false,
+      "glimmerElementSignature": false,
       "importExtensions": false,
       "incompleteTypes": true,
       "missingProperties": false,
@@ -1171,6 +1239,10 @@ exports[`Incomplete types > React types > react props from prop uses > options 1
       "<rootDir>/actual.tsx"
     ],
     "mutators": [
+      [
+        "fixGlimmerElementSignature",
+        null
+      ],
       [
         "fixImportExtensions",
         null
@@ -1260,6 +1332,8 @@ exports[`Incomplete types > React types > react props missing > options 1`] = `
     },
     "filters": [],
     "fixes": {
+      "glimmerBlocksSignature": false,
+      "glimmerElementSignature": false,
       "importExtensions": false,
       "incompleteTypes": true,
       "missingProperties": false,
@@ -1278,6 +1352,10 @@ exports[`Incomplete types > React types > react props missing > options 1`] = `
       "<rootDir>/actual.tsx"
     ],
     "mutators": [
+      [
+        "fixGlimmerElementSignature",
+        null
+      ],
       [
         "fixImportExtensions",
         null
@@ -1367,6 +1445,8 @@ exports[`Incomplete types > parameter types > options 1`] = `
     },
     "filters": [],
     "fixes": {
+      "glimmerBlocksSignature": false,
+      "glimmerElementSignature": false,
       "importExtensions": false,
       "incompleteTypes": true,
       "missingProperties": false,
@@ -1385,6 +1465,10 @@ exports[`Incomplete types > parameter types > options 1`] = `
       "<rootDir>/actual.ts"
     ],
     "mutators": [
+      [
+        "fixGlimmerElementSignature",
+        null
+      ],
       [
         "fixImportExtensions",
         null
@@ -1466,6 +1550,8 @@ exports[`Incomplete types > property declaration types > options 1`] = `
     },
     "filters": [],
     "fixes": {
+      "glimmerBlocksSignature": false,
+      "glimmerElementSignature": false,
       "importExtensions": false,
       "incompleteTypes": true,
       "missingProperties": false,
@@ -1484,6 +1570,10 @@ exports[`Incomplete types > property declaration types > options 1`] = `
       "<rootDir>/actual.ts"
     ],
     "mutators": [
+      [
+        "fixGlimmerElementSignature",
+        null
+      ],
       [
         "fixImportExtensions",
         null
@@ -1565,6 +1655,8 @@ exports[`Incomplete types > return types > options 1`] = `
     },
     "filters": [],
     "fixes": {
+      "glimmerBlocksSignature": false,
+      "glimmerElementSignature": false,
       "importExtensions": false,
       "incompleteTypes": true,
       "missingProperties": false,
@@ -1583,6 +1675,10 @@ exports[`Incomplete types > return types > options 1`] = `
       "<rootDir>/actual.ts"
     ],
     "mutators": [
+      [
+        "fixGlimmerElementSignature",
+        null
+      ],
       [
         "fixImportExtensions",
         null
@@ -1670,6 +1766,8 @@ exports[`Incomplete types > variable types > options 1`] = `
     },
     "filters": [],
     "fixes": {
+      "glimmerBlocksSignature": false,
+      "glimmerElementSignature": false,
       "importExtensions": false,
       "incompleteTypes": true,
       "missingProperties": false,
@@ -1688,6 +1786,10 @@ exports[`Incomplete types > variable types > options 1`] = `
       "<rootDir>/actual.ts"
     ],
     "mutators": [
+      [
+        "fixGlimmerElementSignature",
+        null
+      ],
       [
         "fixImportExtensions",
         null

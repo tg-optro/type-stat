@@ -83,6 +83,11 @@ export const createLanguageServices = (
 		getScriptVersion: () => "0",
 		readDirectory: ts.sys.readDirectory,
 		readFile: getFileContents,
+		// Without this, TypeScript can't see through pnpm's symlinked node_modules layout
+		// when resolving a package's own nested dependencies (e.g. @glint/ember-tsc's
+		// package.json "exports" pointing into @glint/template), and silently resolves
+		// re-exported members to `any`.
+		realpath: ts.sys.realpath,
 	};
 	const languageService = ts.createLanguageService(languageServiceHost);
 

@@ -191,6 +191,16 @@ export type RenameExtensions = "ts" | "tsx" | boolean;
  */
 export interface Fixes {
 	/**
+	 * Whether to infer a Glimmer component's Blocks Signature member from block usage in its template.
+	 */
+	glimmerBlocksSignature: boolean;
+
+	/**
+	 * Whether to infer a Glimmer component's Element Signature member from ...attributes usage in its template.
+	 */
+	glimmerElementSignature: boolean;
+
+	/**
 	 * Whether to add extensions to export and import declarations that refer to file paths without them.
 	 */
 	importExtensions: boolean;

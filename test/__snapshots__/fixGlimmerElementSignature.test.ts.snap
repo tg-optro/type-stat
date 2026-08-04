@@ -1,10 +1,10 @@
 // Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
 
-exports[`Missing properties > missing property accesses > options 1`] = `
+exports[`Glimmer Element Signature > infers the Element member from a splatted attribute > options 1`] = `
 "[
   {
     "cleanups": {
-      "suppressTypeErrors": true
+      "suppressTypeErrors": false
     },
     "files": {
       "above": "",
@@ -14,10 +14,10 @@ exports[`Missing properties > missing property accesses > options 1`] = `
     "filters": [],
     "fixes": {
       "glimmerBlocksSignature": false,
-      "glimmerElementSignature": false,
+      "glimmerElementSignature": true,
       "importExtensions": false,
       "incompleteTypes": false,
-      "missingProperties": true,
+      "missingProperties": false,
       "noImplicitAny": false,
       "noImplicitThis": false,
       "noInferableTypes": false,
@@ -30,7 +30,7 @@ exports[`Missing properties > missing property accesses > options 1`] = `
       }
     },
     "include": [
-      "<rootDir>/actual.ts"
+      "<rootDir>/actual.gts"
     ],
     "mutators": [
       [
@@ -73,14 +73,21 @@ exports[`Missing properties > missing property accesses > options 1`] = `
     },
     "parsedTsConfig": {
       "options": {
+        "module": 99,
+        "moduleResolution": 100,
+        "strict": true,
+        "target": 9,
+        "types": [
+          "ember-source/types"
+        ],
         "configFilePath": "<rootDir>/tsconfig.json",
         "noEmit": true,
-        "noImplicitAny": false,
-        "noImplicitThis": false,
+        "noImplicitAny": true,
+        "noImplicitThis": true,
         "strictNullChecks": true
       },
       "fileNames": [
-        "<rootDir>/actual.ts"
+        "<rootDir>/actual.gts"
       ],
       "typeAcquisition": {
         "enable": false,
@@ -88,8 +95,17 @@ exports[`Missing properties > missing property accesses > options 1`] = `
         "exclude": []
       },
       "raw": {
+        "compilerOptions": {
+          "module": "esnext",
+          "moduleResolution": "bundler",
+          "strict": true,
+          "target": "ES2022",
+          "types": [
+            "ember-source/types"
+          ]
+        },
         "files": [
-          "actual.ts"
+          "actual.gts"
         ]
       },
       "errors": [],

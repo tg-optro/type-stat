@@ -25,7 +25,16 @@ describe("collectReferencedPackageNames", () => {
 			new Set<string>(),
 		);
 
-		expect(Array.from(packageNames)).toStrictEqual(["node", "automutate"]);
+		// "assertion-error" is a real transitive type reference (vitest -> @vitest/expect
+		// -> @types/chai -> assertion-error) that only became visible once
+		// createLanguageServices's LanguageServiceHost gained a `realpath` implementation;
+		// previously TypeScript couldn't see through pnpm's symlinked node_modules layout
+		// to resolve it, so it was silently missing from this set.
+		expect(Array.from(packageNames)).toStrictEqual([
+			"node",
+			"assertion-error",
+			"automutate",
+		]);
 	}, 7_000);
 
 	it("should ignore defined package names", () => {
@@ -47,6 +56,8 @@ describe("collectReferencedPackageNames", () => {
 			new Set<string>(["automutate"]),
 		);
 
-		expect(Array.from(packageNames)).toStrictEqual(["node"]);
+		// See the comment above: "assertion-error" is genuinely referenced and is not
+		// in the ignored set here, so (unlike "automutate") it still surfaces.
+		expect(Array.from(packageNames)).toStrictEqual(["node", "assertion-error"]);
 	});
 });

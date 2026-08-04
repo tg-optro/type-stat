@@ -1,4 +1,5 @@
 import { FileMutator } from "../../shared/fileMutator.js";
+import { fixGlimmerElementSignature } from "./fixGlimmerElementSignature/index.js";
 import { fixImportExtensions } from "./fixImportExtensions/index.js";
 import { fixIncompleteTypes } from "./fixIncompleteTypes/index.js";
 import { fixMissingProperties } from "./fixMissingProperties/index.js";
@@ -8,6 +9,7 @@ import { fixNoInferableTypes } from "./fixNoInferableTypes/index.js";
 import { fixStrictNonNullAssertions } from "./fixStrictNonNullAssertions/index.js";
 
 export const builtInFileMutators: readonly [string, FileMutator][] = [
+	["fixGlimmerElementSignature", fixGlimmerElementSignature],
 	["fixImportExtensions", fixImportExtensions],
 	["fixIncompleteTypes", fixIncompleteTypes],
 	["fixMissingProperties", fixMissingProperties],

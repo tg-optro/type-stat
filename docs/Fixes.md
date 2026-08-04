@@ -9,6 +9,8 @@ These all default to `false` but can be enabled by being set to `true`.
 ```json
 {
 	"fixes": {
+		"glimmerBlocksSignature": true,
+		"glimmerElementSignature": true,
 		"importExtensions": true,
 		"incompleteTypes": true,
 		"missingProperties": true,
@@ -21,6 +23,12 @@ These all default to `false` but can be enabled by being set to `true`.
 ```
 
 ## Fixers
+
+### `glimmerElementSignature`
+
+Whether to infer a Glimmer component's `Element` Signature member from `...attributes` usage in its `<template>`.
+
+See [fixGlimmerElementSignature/README.md](../src/mutators/builtIn/fixGlimmerElementSignature/README.md).
 
 ### `importExtensions`
 
