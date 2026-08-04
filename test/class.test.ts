@@ -9,6 +9,7 @@ describe("Generic classes (existing fixers, no regression)", () => {
 	// docs/dev/2026-08-03-no-implicit-any-property-declarations-bug.md.
 	// expected.ts already encodes the correct target (count: number) so this
 	// can just be un-skipped once that bug is fixed.
+	// eslint-disable-next-line vitest/no-disabled-tests -- intentional, see above
 	it.skip("infers an instance field's type from usage evidence", async () => {
 		const caseDir = path.join(
 			import.meta.dirname,

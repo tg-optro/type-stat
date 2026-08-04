@@ -53,7 +53,8 @@ if (
 	!semanticDiagnostics.some(
 		(diagnostic) =>
 			errorCodes.includes(diagnostic.code) &&
-			...
+			// ...
+			true,
 	)
 ) {
 	return undefined;
@@ -145,9 +146,9 @@ lumping properties in with variables:
 
 ```ts
 enum NoImplicitAnyErrorCode {
+	Variable = 7005,
 	Parameter = 7006,
 	Property = 7008,
-	Variable = 7005,
 }
 ```
 

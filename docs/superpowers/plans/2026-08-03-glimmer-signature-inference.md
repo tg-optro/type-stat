@@ -304,7 +304,6 @@ export const parseRawCompilerOptions = (
 
 ```ts
 // src/services/language.ts
-/* eslint-disable @typescript-eslint/unbound-method */
 import { type TransformedModule } from "@glint/ember-tsc/transform";
 import ts from "typescript";
 
@@ -421,7 +420,6 @@ export const createLanguageServices = (
 		program,
 	};
 };
-/* eslint-enable @typescript-eslint/unbound-method */
 ```
 
 No `getScriptKind` override is needed on the host: TypeScript's own `ensureScriptKind` (used internally by the language service) already falls back to `ScriptKind.TS` for any file whose extension it doesn't recognize (`scriptKind || getScriptKindFromFileName(fileName) || ScriptKind.TS`) -- verified by reading TypeScript 5.9's own source during planning. `.gts` gets the correct fallback for free; `.gjs` would too, but is moot in practice since Plan 1's rename stage always converts `.gjs` to `.gts` earlier in the same pipeline run before any fixer (new or existing) sees the file.
