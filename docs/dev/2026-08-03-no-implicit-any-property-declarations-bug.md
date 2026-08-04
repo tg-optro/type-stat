@@ -64,9 +64,16 @@ Since a class property emits **7008**, not **7005**, this check always fails for
 declarations, so the sub-fixer always returns `undefined` -- independent of assignment
 evidence, decorators, constructors, or anything else about the surrounding class.
 
-Plain variable declarations (`let x; x = 0;`) are unaffected by this bug -- they really
-do emit 7005, so `fixNoImplicitAnyVariableDeclarations` (which shares the same enum value)
-works correctly. Only the property-declaration path is broken.
+Plain variable declarations are unaffected by this bug, though for a narrower reason than
+originally stated here: a same-scope `let x; x = 0;` no longer emits 7005 at all under
+`typescript@5.9.3`'s control-flow analysis (verified directly -- it compiles clean under
+`--strict --noImplicitAny`), so there's nothing there for either the bug or the fixer to
+act on either way. 7005 does still fire for declarations TypeScript can't narrow across a
+module/ambient boundary, e.g. `export let value; value = 0;`, and a real "infer from usage"
+fix exists for that case, so `fixNoImplicitAnyVariableDeclarations` (which shares the same
+enum value) is verified correct for that narrower footprint. Only the property-declaration
+path is broken. See `docs/research/2026-08-04-type-errors-report.md` for the fuller
+diagnostic-code audit this correction came from.
 
 ## Verification
 
