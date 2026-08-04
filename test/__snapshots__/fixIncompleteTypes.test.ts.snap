@@ -35,6 +35,10 @@ exports[`Incomplete types > Implicit generics > incomplete implicit class generi
     ],
     "mutators": [
       [
+        "fixGlimmerBlocksSignature",
+        null
+      ],
+      [
         "fixGlimmerElementSignature",
         null
       ],
@@ -142,6 +146,10 @@ exports[`Incomplete types > Implicit generics > incomplete implicit variable gen
     ],
     "mutators": [
       [
+        "fixGlimmerBlocksSignature",
+        null
+      ],
+      [
         "fixGlimmerElementSignature",
         null
       ],
@@ -246,6 +254,10 @@ exports[`Incomplete types > Interface or type literal generics > options 1`] = `
       "<rootDir>/actual.ts"
     ],
     "mutators": [
+      [
+        "fixGlimmerBlocksSignature",
+        null
+      ],
       [
         "fixGlimmerElementSignature",
         null
@@ -352,6 +364,10 @@ exports[`Incomplete types > Non-generic Interface as Type argument > options 1`]
     ],
     "mutators": [
       [
+        "fixGlimmerBlocksSignature",
+        null
+      ],
+      [
         "fixGlimmerElementSignature",
         null
       ],
@@ -456,6 +472,10 @@ exports[`Incomplete types > React types > React props from prop types > Optional
       "<rootDir>/actual.tsx"
     ],
     "mutators": [
+      [
+        "fixGlimmerBlocksSignature",
+        null
+      ],
       [
         "fixGlimmerElementSignature",
         null
@@ -568,6 +588,10 @@ exports[`Incomplete types > React types > React props from prop types > Optional
     ],
     "mutators": [
       [
+        "fixGlimmerBlocksSignature",
+        null
+      ],
+      [
         "fixGlimmerElementSignature",
         null
       ],
@@ -679,6 +703,10 @@ exports[`Incomplete types > React types > React props from prop types > Optional
     ],
     "mutators": [
       [
+        "fixGlimmerBlocksSignature",
+        null
+      ],
+      [
         "fixGlimmerElementSignature",
         null
       ],
@@ -789,6 +817,10 @@ exports[`Incomplete types > React types > React props from prop types > all > op
       "<rootDir>/actual.tsx"
     ],
     "mutators": [
+      [
+        "fixGlimmerBlocksSignature",
+        null
+      ],
       [
         "fixGlimmerElementSignature",
         null
@@ -903,6 +935,10 @@ exports[`Incomplete types > React types > not react props > options 1`] = `
     ],
     "mutators": [
       [
+        "fixGlimmerBlocksSignature",
+        null
+      ],
+      [
         "fixGlimmerElementSignature",
         null
       ],
@@ -1015,6 +1051,10 @@ exports[`Incomplete types > React types > react prop functions from calls > opti
       "<rootDir>/actual.tsx"
     ],
     "mutators": [
+      [
+        "fixGlimmerBlocksSignature",
+        null
+      ],
       [
         "fixGlimmerElementSignature",
         null
@@ -1129,6 +1169,10 @@ exports[`Incomplete types > React types > react props from later assignments > o
     ],
     "mutators": [
       [
+        "fixGlimmerBlocksSignature",
+        null
+      ],
+      [
         "fixGlimmerElementSignature",
         null
       ],
@@ -1239,6 +1283,10 @@ exports[`Incomplete types > React types > react props from prop uses > options 1
       "<rootDir>/actual.tsx"
     ],
     "mutators": [
+      [
+        "fixGlimmerBlocksSignature",
+        null
+      ],
       [
         "fixGlimmerElementSignature",
         null
@@ -1353,6 +1401,10 @@ exports[`Incomplete types > React types > react props missing > options 1`] = `
     ],
     "mutators": [
       [
+        "fixGlimmerBlocksSignature",
+        null
+      ],
+      [
         "fixGlimmerElementSignature",
         null
       ],
@@ -1466,6 +1518,10 @@ exports[`Incomplete types > parameter types > options 1`] = `
     ],
     "mutators": [
       [
+        "fixGlimmerBlocksSignature",
+        null
+      ],
+      [
         "fixGlimmerElementSignature",
         null
       ],
@@ -1571,6 +1627,10 @@ exports[`Incomplete types > property declaration types > options 1`] = `
     ],
     "mutators": [
       [
+        "fixGlimmerBlocksSignature",
+        null
+      ],
+      [
         "fixGlimmerElementSignature",
         null
       ],
@@ -1675,6 +1735,10 @@ exports[`Incomplete types > return types > options 1`] = `
       "<rootDir>/actual.ts"
     ],
     "mutators": [
+      [
+        "fixGlimmerBlocksSignature",
+        null
+      ],
       [
         "fixGlimmerElementSignature",
         null
@@ -1786,6 +1850,10 @@ exports[`Incomplete types > variable types > options 1`] = `
       "<rootDir>/actual.ts"
     ],
     "mutators": [
+      [
+        "fixGlimmerBlocksSignature",
+        null
+      ],
       [
         "fixGlimmerElementSignature",
         null

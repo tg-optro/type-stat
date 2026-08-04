@@ -34,6 +34,10 @@ exports[`Glimmer Element Signature > infers the Element member from a splatted a
     ],
     "mutators": [
       [
+        "fixGlimmerBlocksSignature",
+        null
+      ],
+      [
         "fixGlimmerElementSignature",
         null
       ],

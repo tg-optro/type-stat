@@ -34,6 +34,10 @@ exports[`filters > empty > options 1`] = `
     ],
     "mutators": [
       [
+        "fixGlimmerBlocksSignature",
+        null
+      ],
+      [
         "fixGlimmerElementSignature",
         null
       ],
@@ -142,6 +146,10 @@ exports[`filters > one > options 1`] = `
       "<rootDir>/actual.ts"
     ],
     "mutators": [
+      [
+        "fixGlimmerBlocksSignature",
+        null
+      ],
       [
         "fixGlimmerElementSignature",
         null
@@ -252,6 +260,10 @@ exports[`filters > two > options 1`] = `
       "<rootDir>/actual.ts"
     ],
     "mutators": [
+      [
+        "fixGlimmerBlocksSignature",
+        null
+      ],
       [
         "fixGlimmerElementSignature",
         null

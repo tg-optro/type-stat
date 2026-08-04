@@ -282,6 +282,10 @@ exports[`include > sub-directory > options 1`] = `
     ],
     "mutators": [
       [
+        "fixGlimmerBlocksSignature",
+        null
+      ],
+      [
         "fixGlimmerElementSignature",
         null
       ],

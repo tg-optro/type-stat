@@ -1,6 +1,6 @@
 // Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
 
-exports[`enum as argument > options 1`] = `
+exports[`Glimmer Blocks Signature > infers the Blocks member from a named yield > options 1`] = `
 "[
   {
     "cleanups": {
@@ -13,10 +13,10 @@ exports[`enum as argument > options 1`] = `
     },
     "filters": [],
     "fixes": {
-      "glimmerBlocksSignature": false,
+      "glimmerBlocksSignature": true,
       "glimmerElementSignature": false,
       "importExtensions": false,
-      "incompleteTypes": true,
+      "incompleteTypes": false,
       "missingProperties": false,
       "noImplicitAny": false,
       "noImplicitThis": false,
@@ -30,7 +30,7 @@ exports[`enum as argument > options 1`] = `
       }
     },
     "include": [
-      "<rootDir>/actual.ts"
+      "<rootDir>/actual.gts"
     ],
     "mutators": [
       [
@@ -77,14 +77,21 @@ exports[`enum as argument > options 1`] = `
     },
     "parsedTsConfig": {
       "options": {
+        "module": 99,
+        "moduleResolution": 100,
+        "strict": true,
+        "target": 9,
+        "types": [
+          "ember-source/types"
+        ],
         "configFilePath": "<rootDir>/tsconfig.json",
         "noEmit": true,
-        "noImplicitAny": false,
-        "noImplicitThis": false,
-        "strictNullChecks": false
+        "noImplicitAny": true,
+        "noImplicitThis": true,
+        "strictNullChecks": true
       },
       "fileNames": [
-        "<rootDir>/actual.ts"
+        "<rootDir>/actual.gts"
       ],
       "typeAcquisition": {
         "enable": false,
@@ -92,8 +99,17 @@ exports[`enum as argument > options 1`] = `
         "exclude": []
       },
       "raw": {
+        "compilerOptions": {
+          "module": "esnext",
+          "moduleResolution": "bundler",
+          "strict": true,
+          "target": "ES2022",
+          "types": [
+            "ember-source/types"
+          ]
+        },
         "files": [
-          "actual.ts"
+          "actual.gts"
         ]
       },
       "errors": [],
@@ -104,7 +120,9 @@ exports[`enum as argument > options 1`] = `
       "shell": []
     },
     "projectPath": "<rootDir>/tsconfig.json",
-    "types": {}
+    "types": {
+      "strictNullChecks": true
+    }
   }
 ]"
 `;

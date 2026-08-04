@@ -24,6 +24,12 @@ These all default to `false` but can be enabled by being set to `true`.
 
 ## Fixers
 
+### `glimmerBlocksSignature`
+
+Whether to infer a Glimmer component's `Blocks` Signature member from `{{yield ...}}` usage in its `<template>`.
+
+See [fixGlimmerBlocksSignature/README.md](../src/mutators/builtIn/fixGlimmerBlocksSignature/README.md).
+
 ### `glimmerElementSignature`
 
 Whether to infer a Glimmer component's `Element` Signature member from `...attributes` usage in its `<template>`.

@@ -34,6 +34,10 @@ exports[`Custom mutators > empty array > options 1`] = `
     ],
     "mutators": [
       [
+        "fixGlimmerBlocksSignature",
+        null
+      ],
+      [
         "fixGlimmerElementSignature",
         null
       ],

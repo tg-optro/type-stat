@@ -34,6 +34,10 @@ exports[`No inferable types > parameters > options 1`] = `
     ],
     "mutators": [
       [
+        "fixGlimmerBlocksSignature",
+        null
+      ],
+      [
         "fixGlimmerElementSignature",
         null
       ],
@@ -141,6 +145,10 @@ exports[`No inferable types > property declarations > options 1`] = `
     ],
     "mutators": [
       [
+        "fixGlimmerBlocksSignature",
+        null
+      ],
+      [
         "fixGlimmerElementSignature",
         null
       ],
@@ -247,6 +255,10 @@ exports[`No inferable types > variable declarations > options 1`] = `
       "<rootDir>/actual.ts"
     ],
     "mutators": [
+      [
+        "fixGlimmerBlocksSignature",
+        null
+      ],
       [
         "fixGlimmerElementSignature",
         null

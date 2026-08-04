@@ -34,6 +34,10 @@ exports[`Cleanups > non-TypeErrors > options 1`] = `
     ],
     "mutators": [
       [
+        "fixGlimmerBlocksSignature",
+        null
+      ],
+      [
         "fixGlimmerElementSignature",
         null
       ],
@@ -147,6 +151,10 @@ exports[`Cleanups > suppressTypeErrors > options 1`] = `
       "<rootDir>/actual.ts"
     ],
     "mutators": [
+      [
+        "fixGlimmerBlocksSignature",
+        null
+      ],
       [
         "fixGlimmerElementSignature",
         null

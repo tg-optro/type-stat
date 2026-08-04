@@ -34,6 +34,10 @@ exports[`strictNonNullAssertions > binaryExpressions > options 1`] = `
     ],
     "mutators": [
       [
+        "fixGlimmerBlocksSignature",
+        null
+      ],
+      [
         "fixGlimmerElementSignature",
         null
       ],
@@ -144,6 +148,10 @@ exports[`strictNonNullAssertions > callExpressions > options 1`] = `
     ],
     "mutators": [
       [
+        "fixGlimmerBlocksSignature",
+        null
+      ],
+      [
         "fixGlimmerElementSignature",
         null
       ],
@@ -250,6 +258,10 @@ exports[`strictNonNullAssertions > objectLiterals > options 1`] = `
       "<rootDir>/actual.ts"
     ],
     "mutators": [
+      [
+        "fixGlimmerBlocksSignature",
+        null
+      ],
       [
         "fixGlimmerElementSignature",
         null
@@ -358,6 +370,10 @@ exports[`strictNonNullAssertions > propertyAccesses > options 1`] = `
     ],
     "mutators": [
       [
+        "fixGlimmerBlocksSignature",
+        null
+      ],
+      [
         "fixGlimmerElementSignature",
         null
       ],
@@ -464,6 +480,10 @@ exports[`strictNonNullAssertions > returnTypes > options 1`] = `
       "<rootDir>/actual.ts"
     ],
     "mutators": [
+      [
+        "fixGlimmerBlocksSignature",
+        null
+      ],
       [
         "fixGlimmerElementSignature",
         null
