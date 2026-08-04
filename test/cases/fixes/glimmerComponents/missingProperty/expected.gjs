@@ -8,6 +8,6 @@ excited: boolean;
 	}
 
 	<template>
-		<p>Hello!</p>
+		<p>Hello{{if this.excited '!' ''}}</p>
 	</template>
 }

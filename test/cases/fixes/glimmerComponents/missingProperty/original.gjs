@@ -7,6 +7,6 @@ export default class Greeter extends Component {
 	}
 
 	<template>
-		<p>Hello!</p>
+		<p>Hello{{if this.excited '!' ''}}</p>
 	</template>
 }
