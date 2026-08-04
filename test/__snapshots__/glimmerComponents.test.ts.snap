@@ -127,6 +127,133 @@ exports[`Glimmer components (existing fixers, no regression) > adds a missing pr
 ]"
 `;
 
+exports[`Glimmer components (existing fixers, no regression) > adds a missing property declaration in a .gts class alongside a template > options 1`] = `
+"[
+  {
+    "cleanups": {
+      "suppressTypeErrors": false
+    },
+    "files": {
+      "above": "",
+      "below": "",
+      "renameExtensions": false
+    },
+    "filters": [],
+    "fixes": {
+      "glimmerBlocksSignature": true,
+      "glimmerElementSignature": true,
+      "importExtensions": true,
+      "incompleteTypes": true,
+      "missingProperties": true,
+      "noImplicitAny": true,
+      "noImplicitThis": true,
+      "noInferableTypes": true,
+      "strictNonNullAssertions": true
+    },
+    "hints": {
+      "react": {
+        "propTypes": "whenRequired",
+        "propTypesOptionality": "asWritten"
+      }
+    },
+    "include": [
+      "<rootDir>/actual.gts"
+    ],
+    "mutators": [
+      [
+        "fixGlimmerBlocksSignature",
+        null
+      ],
+      [
+        "fixGlimmerElementSignature",
+        null
+      ],
+      [
+        "fixImportExtensions",
+        null
+      ],
+      [
+        "fixIncompleteTypes",
+        null
+      ],
+      [
+        "fixMissingProperties",
+        null
+      ],
+      [
+        "fixNoImplicitAny",
+        null
+      ],
+      [
+        "fixNoImplicitThis",
+        null
+      ],
+      [
+        "fixNoInferableTypes",
+        null
+      ],
+      [
+        "fixStrictNonNullAssertions",
+        null
+      ]
+    ],
+    "output": {},
+    "package": {
+      "directory": "<rootDir>",
+      "file": "<rootDir>/package.json"
+    },
+    "parsedTsConfig": {
+      "options": {
+        "module": 99,
+        "moduleResolution": 100,
+        "strict": true,
+        "target": 9,
+        "types": [
+          "ember-source/types"
+        ],
+        "configFilePath": "<rootDir>/tsconfig.json",
+        "noEmit": true,
+        "noImplicitAny": true,
+        "noImplicitThis": true,
+        "strictNullChecks": true
+      },
+      "fileNames": [
+        "<rootDir>/actual.gts"
+      ],
+      "typeAcquisition": {
+        "enable": false,
+        "include": [],
+        "exclude": []
+      },
+      "raw": {
+        "compilerOptions": {
+          "module": "esnext",
+          "moduleResolution": "bundler",
+          "strict": true,
+          "target": "ES2022",
+          "types": [
+            "ember-source/types"
+          ]
+        },
+        "files": [
+          "actual.gts"
+        ]
+      },
+      "errors": [],
+      "wildcardDirectories": {},
+      "compileOnSave": false
+    },
+    "postProcess": {
+      "shell": []
+    },
+    "projectPath": "<rootDir>/tsconfig.json",
+    "types": {
+      "strictNullChecks": true
+    }
+  }
+]"
+`;
+
 exports[`Glimmer components (existing fixers, no regression) > leaves a @tracked property with an {{on}} handler untouched > options 1`] = `
 "[
   {
@@ -286,7 +413,7 @@ exports[`Glimmer components (existing fixers, no regression) > leaves a getter p
       }
     },
     "include": [
-      "<rootDir>/actual.gjs"
+      "<rootDir>/actual.gts"
     ],
     "mutators": [
       [
@@ -347,7 +474,7 @@ exports[`Glimmer components (existing fixers, no regression) > leaves a getter p
         "strictNullChecks": true
       },
       "fileNames": [
-        "<rootDir>/actual.gjs"
+        "<rootDir>/actual.gts"
       ],
       "typeAcquisition": {
         "enable": false,
@@ -365,7 +492,7 @@ exports[`Glimmer components (existing fixers, no regression) > leaves a getter p
           ]
         },
         "files": [
-          "actual.gjs"
+          "actual.gts"
         ]
       },
       "errors": [],
@@ -413,7 +540,7 @@ exports[`Glimmer components (existing fixers, no regression) > leaves a template
       }
     },
     "include": [
-      "<rootDir>/actual.gjs"
+      "<rootDir>/actual.gts"
     ],
     "mutators": [
       [
@@ -474,7 +601,7 @@ exports[`Glimmer components (existing fixers, no regression) > leaves a template
         "strictNullChecks": true
       },
       "fileNames": [
-        "<rootDir>/actual.gjs"
+        "<rootDir>/actual.gts"
       ],
       "typeAcquisition": {
         "enable": false,
@@ -492,7 +619,7 @@ exports[`Glimmer components (existing fixers, no regression) > leaves a template
           ]
         },
         "files": [
-          "actual.gjs"
+          "actual.gts"
         ]
       },
       "errors": [],
