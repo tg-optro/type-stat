@@ -15,7 +15,7 @@ describe("Generic classes (existing fixers, no regression)", () => {
 		expect(options).toMatchSnapshot("options");
 	}, 10000);
 
-	it("leaves a self-referential instance getter untouched", async () => {
+	it("leaves a circularly-typed instance getter untouched", async () => {
 		const caseDir = path.join(
 			import.meta.dirname,
 			"./cases/fixes/class/instanceGetter",

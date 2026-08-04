@@ -230,7 +230,7 @@ exports[`Generic classes (existing fixers, no regression) > infers an instance m
 ]"
 `;
 
-exports[`Generic classes (existing fixers, no regression) > leaves a self-referential instance getter untouched > options 1`] = `
+exports[`Generic classes (existing fixers, no regression) > leaves a circularly-typed instance getter untouched > options 1`] = `
 "[
   {
     "cleanups": {
