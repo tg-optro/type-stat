@@ -7,7 +7,18 @@ describe("Glimmer Element Signature", () => {
 	it("infers the Element member from a splatted attribute", async () => {
 		const caseDir = path.join(
 			import.meta.dirname,
-			"./cases/fixes/glimmerElementSignature/basic",
+			"./cases/fixes/glimmerElementSignature/simpleDiv",
+		);
+		const { actualContent, expectedFilePath, options } =
+			await runMutationTest(caseDir);
+		await expect(actualContent).toMatchFileSnapshot(expectedFilePath);
+		expect(options).toMatchSnapshot("options");
+	}, 10000);
+
+	it("infers the Element member on an element with other bound attributes", async () => {
+		const caseDir = path.join(
+			import.meta.dirname,
+			"./cases/fixes/glimmerElementSignature/ariaAttrs",
 		);
 		const { actualContent, expectedFilePath, options } =
 			await runMutationTest(caseDir);

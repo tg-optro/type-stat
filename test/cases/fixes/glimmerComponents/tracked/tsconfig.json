@@ -1,0 +1,11 @@
+{
+	"compilerOptions": {
+		"experimentalDecorators": true,
+		"module": "esnext",
+		"moduleResolution": "bundler",
+		"strict": true,
+		"target": "ES2022",
+		"types": ["ember-source/types"]
+	},
+	"files": ["actual.gjs"]
+}

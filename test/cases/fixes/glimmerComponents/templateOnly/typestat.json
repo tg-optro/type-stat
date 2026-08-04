@@ -1,0 +1,13 @@
+{
+	"fixes": {
+		"glimmerBlocksSignature": true,
+		"glimmerElementSignature": true,
+		"importExtensions": true,
+		"incompleteTypes": true,
+		"missingProperties": true,
+		"noImplicitAny": true,
+		"noImplicitThis": true,
+		"noInferableTypes": true,
+		"strictNonNullAssertions": true
+	}
+}
