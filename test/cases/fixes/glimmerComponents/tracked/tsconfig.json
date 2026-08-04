@@ -7,5 +7,5 @@
 		"target": "ES2022",
 		"types": ["ember-source/types"]
 	},
-	"files": ["actual.gjs"]
+	"files": ["actual.gts"]
 }

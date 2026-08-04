@@ -157,7 +157,7 @@ exports[`Glimmer components (existing fixers, no regression) > leaves a @tracked
       }
     },
     "include": [
-      "<rootDir>/actual.gjs"
+      "<rootDir>/actual.gts"
     ],
     "mutators": [
       [
@@ -219,7 +219,7 @@ exports[`Glimmer components (existing fixers, no regression) > leaves a @tracked
         "strictNullChecks": true
       },
       "fileNames": [
-        "<rootDir>/actual.gjs"
+        "<rootDir>/actual.gts"
       ],
       "typeAcquisition": {
         "enable": false,
@@ -238,7 +238,7 @@ exports[`Glimmer components (existing fixers, no regression) > leaves a @tracked
           ]
         },
         "files": [
-          "actual.gjs"
+          "actual.gts"
         ]
       },
       "errors": [],
