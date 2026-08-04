@@ -126,6 +126,11 @@ fixture (`test/cases/fixes/glimmerComponents/tracked/`) already has `expected.gt
 the correct target output (`@tracked count: number`), so once this bug is fixed, that test
 can simply be un-skipped -- no further fixture changes should be needed.
 
+`test/class.test.ts` has an analogous plain-`.ts` (non-Glimmer) test, `"infers an instance
+field's type from usage evidence"`, also `it.skip`, confirming this bug isn't
+Glimmer-specific. Its fixture (`test/cases/fixes/class/instanceField/`) likewise already has
+`expected.ts` set to the correct target (`count: number`).
+
 ## Suggested fix
 
 Split the enum into the correct, distinct codes and select by node kind rather than
