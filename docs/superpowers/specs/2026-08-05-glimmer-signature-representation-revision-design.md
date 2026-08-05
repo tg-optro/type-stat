@@ -32,7 +32,7 @@ ends up as a named `interface <ComponentName>Signature`.**
 | ---------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | None (`extends Component`)                                 | Unchanged -- already generates a new named interface (original spec's behavior).                                                                                                                                                                                                                                                       |
 | `interface <ComponentName>Signature`                       | Unchanged -- patch the member in place (original spec's behavior).                                                                                                                                                                                                                                                                     |
-| `interface SomeOtherName`                                  | **New:** rename the declaration _and every same-file reference_ to `<ComponentName>Signature`, then patch the member. See "Open question: shared/multi-use interfaces" below.                                                                                                                                                          |
+| `interface SomeOtherName`                                  | **New:** rename the declaration _and every same-file reference_ to `<ComponentName>Signature`, then patch the member -- unconditionally, even if some of those references are unrelated to being this component's Signature. See "Resolved: shared/multi-use interfaces" below.                                                        |
 | `type SomeName = { ... }` (object-literal alias, any name) | **New:** convert `type` -> `interface`, renaming to `<ComponentName>Signature` if the name differs, then patch. Emit a warning (`output.stdout`) noting the conversion -- this changes the declaration's kind, which a user may not expect even though it's behavior-preserving.                                                       |
 | Inline literal in the `extends` clause                     | **New:** extract it into a new `interface <ComponentName>Signature { ... }` declaration immediately above the class (same insertion point as the "no existing Signature" case), preserving its existing members, point the `extends` clause at the new name, then patch. Emit the same warning.                                        |
 | Anything else (union, intersection, mapped type, etc.)     | **Changed:** `throw new Error(...)` (-> `MutationsComplaint`), same treatment as the naming-collision and `.gjs`-assumption cases below. Previously a silent no-op; per review feedback, anything this fixer can't resolve into the named-interface shape should say so loudly rather than silently leave the Signature un-normalized. |
@@ -55,30 +55,23 @@ usage-evidence nodes for other fixers. It wraps
   and any other reference to `X` elsewhere in the file (e.g. a helper function typed to
   accept it).
 
-### Open question: shared/multi-use interfaces
+### Resolved: shared/multi-use interfaces
 
-**Not yet resolved -- flagged during review, needs a decision before implementation.** The
-rename table row above assumes `SomeOtherName` exists solely to be this component's
-Signature. But `findReferences` will find _every_ in-file reference regardless of why it
-exists -- if `SomeOtherName` is also used as, say, a plain function parameter's type
-elsewhere in the same file (unrelated to being a Signature), renaming it still works
-mechanically (every reference gets updated consistently, nothing breaks type-wise), but
-`<ComponentName>Signature` becomes a misleading name for something that isn't solely that
-component's concern. Options to resolve before this is implemented:
+**Decision: rename unconditionally, regardless of other uses.** The rename table row above
+touches `SomeOtherName`'s declaration and every same-file reference `findReferences` finds,
+even if some of those references have nothing to do with being this component's Signature
+(e.g. `SomeOtherName` also used as some unrelated function's parameter type in the same
+file). This is the simplest option and matches "always converge on the named-interface
+convention" as asked for in review -- no detection of "is this interface used for anything
+else" is needed, and this case does not route through the naming-collision guard (that guard
+is only for when the _target_ name `<ComponentName>Signature` is already taken by something
+else, not for when the _source_ name has other uses).
 
-1. Rename unconditionally regardless of other uses (simplest, matches "always converge on
-   the named-interface convention" the review comment asked for; accepts that the name may
-   end up describing something broader than one component).
-2. Detect "this interface is used as more than just this component's Signature type
-   argument" (e.g. any reference that isn't the `extends Component<X>` position itself, or
-   isn't inside this component's own file scope in some other sense) and treat it like a
-   naming collision -- `throw`/complain instead of renaming.
-3. Something narrower still to be defined.
-
-Separately: this only ever arises for a hand-written `.gts` file where a human already gave
-the Signature type a different name -- it's not a case a fresh `.gjs` -> `.gts` conversion
-would ever produce on its own (a freshly-converted file has no existing Signature at all,
-so it goes through the unchanged "no existing Signature" path instead).
+Separately, and unaffected by the above: this only ever arises for a hand-written `.gts`
+file where a human already gave the Signature type a different name -- it's not a case a
+fresh `.gjs` -> `.gts` conversion would ever produce on its own (a freshly-converted file has
+no existing Signature at all, so it goes through the unchanged "no existing Signature" path
+instead).
 
 ## Naming collision handling
 
