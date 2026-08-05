@@ -9,25 +9,38 @@ import { patchSignatureMember } from "./patchSignatureMember.js";
 
 const fileName = "/virtual/component.ts";
 
-const createRequest = (sourceText: string): FileMutationsRequest => {
-	const compilerHost: ts.CompilerHost = {
-		...ts.createCompilerHost({}),
-		fileExists: (requestedFileName) => requestedFileName === fileName,
-		getSourceFile: (requestedFileName) =>
-			requestedFileName === fileName
-				? ts.createSourceFile(
-						fileName,
-						sourceText,
-						ts.ScriptTarget.ES2022,
-						true,
-					)
-				: undefined,
-		readFile: (requestedFileName) =>
-			requestedFileName === fileName ? sourceText : undefined,
+const createRequest = (
+	sourceText: string,
+	requestFileName: string = fileName,
+): FileMutationsRequest => {
+	const files = new Map([[requestFileName, sourceText]]);
+
+	const languageServiceHost: ts.LanguageServiceHost = {
+		fileExists: (requestedFileName) => files.has(requestedFileName),
+		getCompilationSettings: () => ({}),
+		getCurrentDirectory: () => "/virtual",
+		getDefaultLibFileName: (options) => ts.getDefaultLibFilePath(options),
+		getScriptFileNames: () => [requestFileName],
+		getScriptSnapshot: (requestedFileName) => {
+			const contents = files.get(requestedFileName);
+			return contents === undefined
+				? undefined
+				: ts.ScriptSnapshot.fromString(contents);
+		},
+		getScriptVersion: () => "0",
+		readFile: (requestedFileName) => files.get(requestedFileName),
 	};
 
-	const program = ts.createProgram([fileName], {}, compilerHost);
-	const sourceFile = program.getSourceFile(fileName);
+	const languageService = ts.createLanguageService(
+		languageServiceHost,
+		ts.createDocumentRegistry(),
+	);
+	const program = languageService.getProgram();
+	if (program === undefined) {
+		throw new Error("Expected a program");
+	}
+
+	const sourceFile = program.getSourceFile(requestFileName);
 	if (sourceFile === undefined) {
 		throw new Error("Expected a source file");
 	}
@@ -35,7 +48,7 @@ const createRequest = (sourceText: string): FileMutationsRequest => {
 	const filteredNodes = new Set<ts.Node>();
 	const services = {
 		glimmerTransforms: new Map(),
-		languageService: {} as ts.LanguageService,
+		languageService,
 		printers: {} as never,
 		program,
 	};
@@ -43,8 +56,16 @@ const createRequest = (sourceText: string): FileMutationsRequest => {
 	return {
 		fileInfoCache: new FileInfoCache(filteredNodes, services, sourceFile),
 		filteredNodes,
-		nameGenerator: new NameGenerator(fileName),
-		options: { parsedTsConfig: { options: {} } } as never,
+		nameGenerator: new NameGenerator(requestFileName),
+		options: {
+			output: {
+				// eslint-disable-next-line @typescript-eslint/no-empty-function -- test stub
+				stderr: () => {},
+				// eslint-disable-next-line @typescript-eslint/no-empty-function -- test stub
+				stdout: () => {},
+			},
+			parsedTsConfig: { options: {} },
+		} as never,
 		services,
 		sourceFile,
 	};
