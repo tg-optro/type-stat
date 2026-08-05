@@ -11,6 +11,17 @@ import { textInsert, textSwap } from "../text-mutations.js";
 
 export type SignatureMembersNode = ts.InterfaceDeclaration | ts.TypeLiteralNode;
 
+type ExistingSignatureSource =
+	| {
+			readonly declaration: ts.InterfaceDeclaration;
+			readonly kind: "interface";
+	  }
+	| {
+			readonly declaration: ts.TypeAliasDeclaration;
+			readonly kind: "typeAlias";
+	  }
+	| { readonly kind: "inlineLiteral"; readonly literal: ts.TypeLiteralNode };
+
 export const patchSignatureMember = (
 	request: FileMutationsRequest,
 	componentClass: ts.ClassDeclaration,
@@ -34,18 +45,62 @@ export const patchSignatureMember = (
 		);
 	}
 
+	ensureNotGlimmerJsFileWithExistingSignature(request.sourceFile);
+
 	const [signatureTypeArgument] = heritageType.typeArguments;
-	const signatureMembersNode = resolveSignatureMembersNode(
-		request,
-		signatureTypeArgument,
-	);
-	if (signatureMembersNode === undefined) {
-		return undefined;
+	const source = resolveExistingSignatureSource(request, signatureTypeArgument);
+	if (source === undefined) {
+		throw new Error(
+			`Could not resolve the existing Signature type argument on '${componentClass.name?.text ?? "the component"}' in '${request.sourceFile.fileName}' into a plain object shape (interface, type alias of an object literal, or inline literal). Refusing to guess how to normalize it.`,
+		);
 	}
 
-	return patchExistingSignatureMember(
+	const componentName = componentClass.name?.text ?? "Component";
+	const targetName = `${componentName}Signature`;
+
+	if (source.kind === "interface") {
+		if (source.declaration.name.text === targetName) {
+			return patchExistingSignatureMember(
+				request,
+				source.declaration,
+				memberName,
+				newTypeText,
+			);
+		}
+
+		ensureNoNameCollision(request.sourceFile, targetName, undefined);
+		return renameSignatureDeclaration(
+			request,
+			source.declaration,
+			targetName,
+			memberName,
+			newTypeText,
+		);
+	}
+
+	if (source.kind === "typeAlias") {
+		ensureNoNameCollision(request.sourceFile, targetName, source.declaration);
+		warnAboutSignatureConversion(
+			request,
+			`type alias '${source.declaration.name.text}'`,
+			targetName,
+		);
+		return convertTypeAliasAndPatch(
+			request,
+			source.declaration,
+			targetName,
+			memberName,
+			newTypeText,
+		);
+	}
+
+	ensureNoNameCollision(request.sourceFile, targetName, undefined);
+	warnAboutSignatureConversion(request, "an inline literal", targetName);
+	return extractInlineLiteralAndPatch(
 		request,
-		signatureMembersNode,
+		componentClass,
+		source.literal,
+		targetName,
 		memberName,
 		newTypeText,
 	);
@@ -84,12 +139,12 @@ const createNewSignatureMutation = (
 	return combineMutations(newInterfaceInsertion, newTypeArgumentInsertion);
 };
 
-const resolveSignatureMembersNode = (
+const resolveExistingSignatureSource = (
 	request: FileMutationsRequest,
 	signatureTypeArgument: ts.TypeNode,
-): SignatureMembersNode | undefined => {
+): ExistingSignatureSource | undefined => {
 	if (ts.isTypeLiteralNode(signatureTypeArgument)) {
-		return signatureTypeArgument;
+		return { kind: "inlineLiteral", literal: signatureTypeArgument };
 	}
 
 	if (!ts.isTypeReferenceNode(signatureTypeArgument)) {
@@ -107,17 +162,221 @@ const resolveSignatureMembersNode = (
 	}
 
 	if (ts.isInterfaceDeclaration(declaration)) {
-		return declaration;
+		return { declaration, kind: "interface" };
 	}
 
 	if (
 		ts.isTypeAliasDeclaration(declaration) &&
 		ts.isTypeLiteralNode(declaration.type)
 	) {
-		return declaration.type;
+		return { declaration, kind: "typeAlias" };
 	}
 
 	return undefined;
+};
+
+const renameSignatureDeclaration = (
+	request: FileMutationsRequest,
+	declaration: ts.InterfaceDeclaration,
+	targetName: string,
+	memberName: string,
+	newTypeText: string,
+): Mutation => {
+	const declarationNameSwap = textSwap(
+		targetName,
+		declaration.name.getStart(request.sourceFile),
+		declaration.name.end,
+	);
+	const referenceMutations = createReferenceRenameMutations(
+		request,
+		declaration.name,
+		targetName,
+	);
+	const memberMutation = patchExistingSignatureMember(
+		request,
+		declaration,
+		memberName,
+		newTypeText,
+	);
+
+	const mutations: Mutation[] = [declarationNameSwap, ...referenceMutations];
+	if (memberMutation !== undefined) {
+		mutations.push(memberMutation);
+	}
+
+	return combineMutations(...mutations);
+};
+
+const convertTypeAliasAndPatch = (
+	request: FileMutationsRequest,
+	declaration: ts.TypeAliasDeclaration,
+	targetName: string,
+	memberName: string,
+	newTypeText: string,
+): Mutation => {
+	const literal = declaration.type as ts.TypeLiteralNode;
+
+	const keywordSwap = textSwap(
+		`interface ${targetName} `,
+		declaration.getStart(request.sourceFile),
+		literal.getStart(request.sourceFile),
+	);
+	const referenceMutations =
+		declaration.name.text === targetName
+			? []
+			: createReferenceRenameMutations(request, declaration.name, targetName);
+	const memberMutation = patchExistingSignatureMember(
+		request,
+		literal,
+		memberName,
+		newTypeText,
+	);
+
+	const mutations: Mutation[] = [keywordSwap, ...referenceMutations];
+	if (memberMutation !== undefined) {
+		mutations.push(memberMutation);
+	}
+
+	return combineMutations(...mutations);
+};
+
+const extractInlineLiteralAndPatch = (
+	request: FileMutationsRequest,
+	componentClass: ts.ClassDeclaration,
+	literal: ts.TypeLiteralNode,
+	targetName: string,
+	memberName: string,
+	newTypeText: string,
+): Mutation => {
+	const bodyText = buildSignatureBodyText(
+		request,
+		literal,
+		memberName,
+		newTypeText,
+	);
+
+	const newInterfaceInsertion = textInsert(
+		`interface ${targetName} ${bodyText}\n\n`,
+		componentClass.getStart(),
+	);
+	const typeArgumentSwap = textSwap(
+		targetName,
+		literal.getStart(request.sourceFile),
+		literal.end,
+	);
+
+	return combineMutations(newInterfaceInsertion, typeArgumentSwap);
+};
+
+const buildSignatureBodyText = (
+	request: FileMutationsRequest,
+	literal: ts.TypeLiteralNode,
+	memberName: string,
+	newTypeText: string,
+): string => {
+	const literalStart = literal.getStart(request.sourceFile);
+	const literalText = literal.getText(request.sourceFile);
+	const existingMember = findExistingMember(literal, memberName);
+
+	if (existingMember === undefined) {
+		const { insertionPoint, needsLeadingSeparator } = getEndInsertionPoint(
+			request.sourceFile,
+			literal,
+		);
+		const separator = needsLeadingSeparator ? ";\n\t" : "";
+		const offset = insertionPoint - literalStart;
+
+		return (
+			literalText.slice(0, offset) +
+			`${separator}${memberName}: ${newTypeText};\n` +
+			literalText.slice(offset)
+		);
+	}
+
+	const typeStartOffset =
+		existingMember.type.getStart(request.sourceFile) - literalStart;
+	const typeEndOffset = existingMember.type.end - literalStart;
+
+	return (
+		literalText.slice(0, typeStartOffset) +
+		newTypeText +
+		literalText.slice(typeEndOffset)
+	);
+};
+
+const createReferenceRenameMutations = (
+	request: FileMutationsRequest,
+	nameNode: ts.Identifier,
+	targetName: string,
+): Mutation[] => {
+	const referencingNodes =
+		request.fileInfoCache.getNodeReferencesAsNodes(nameNode) ?? [];
+
+	return referencingNodes.map((node) =>
+		textSwap(targetName, node.getStart(request.sourceFile), node.end),
+	);
+};
+
+const ensureNoNameCollision = (
+	sourceFile: ts.SourceFile,
+	targetName: string,
+	excludeDeclaration: ts.Statement | undefined,
+): void => {
+	const existing = getTopLevelDeclaredNames(sourceFile).get(targetName);
+	if (existing !== undefined && existing !== excludeDeclaration) {
+		throw new Error(
+			`Cannot normalize a Glimmer component's Signature to '${targetName}' in '${sourceFile.fileName}': that name is already bound by an unrelated declaration.`,
+		);
+	}
+};
+
+const getTopLevelDeclaredNames = (
+	sourceFile: ts.SourceFile,
+): Map<string, ts.Statement> => {
+	const namesToStatements = new Map<string, ts.Statement>();
+
+	for (const statement of sourceFile.statements) {
+		if (
+			(ts.isInterfaceDeclaration(statement) ||
+				ts.isTypeAliasDeclaration(statement) ||
+				ts.isClassDeclaration(statement) ||
+				ts.isFunctionDeclaration(statement)) &&
+			statement.name !== undefined
+		) {
+			namesToStatements.set(statement.name.text, statement);
+			continue;
+		}
+
+		if (ts.isVariableStatement(statement)) {
+			for (const declaration of statement.declarationList.declarations) {
+				if (ts.isIdentifier(declaration.name)) {
+					namesToStatements.set(declaration.name.text, statement);
+				}
+			}
+		}
+	}
+
+	return namesToStatements;
+};
+
+const ensureNotGlimmerJsFileWithExistingSignature = (
+	sourceFile: ts.SourceFile,
+): void => {
+	if (/\.gjs$/i.test(sourceFile.fileName)) {
+		throw new Error(
+			`Found an existing Signature type argument in a .gjs file ('${sourceFile.fileName}'), which should be impossible -- .gjs files can't contain TypeScript generic syntax. This file may already be in a broken state.`,
+		);
+	}
+};
+
+const warnAboutSignatureConversion = (
+	request: FileMutationsRequest,
+	from: string,
+	targetName: string,
+): void => {
+	request.options.output.stdout(
+		`Converting ${from} to interface '${targetName}' for a Glimmer component's Signature in '${request.sourceFile.fileName}'.\n`,
+	);
 };
 
 const patchExistingSignatureMember = (
