@@ -4,12 +4,14 @@ interface UnorderedListArgs {
 	items: string[];
 }
 
-export default class UnorderedList extends Component<{
+interface UnorderedListSignature {
 	Args: UnorderedListArgs;
 Blocks: {
 	default: [string, number];
 };
-}> {
+}
+
+export default class UnorderedList extends Component<UnorderedListSignature> {
 	get filtered() {
 		return this.args.items.filter(Boolean);
 	}

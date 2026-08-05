@@ -25,4 +25,15 @@ describe("Glimmer Blocks Signature", () => {
 		await expect(actualContent).toMatchFileSnapshot(expectedFilePath);
 		expect(options).toMatchSnapshot("options");
 	}, 10000);
+
+	it("renames a differently-named existing Signature interface and its references", async () => {
+		const caseDir = path.join(
+			import.meta.dirname,
+			"./cases/fixes/glimmerBlocksSignature/renamedSignature",
+		);
+		const { actualContent, expectedFilePath, options } =
+			await runMutationTest(caseDir);
+		await expect(actualContent).toMatchFileSnapshot(expectedFilePath);
+		expect(options).toMatchSnapshot("options");
+	}, 10000);
 });
