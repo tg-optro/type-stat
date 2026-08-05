@@ -15,7 +15,7 @@ both for `class <ComponentName> extends Component<<ComponentName>Signature>` and
 inference itself, and generating a typed constructor from a Signature's `Args` member, are
 both still future work -- neither is designed here. This revision only changes how an
 existing or newly-created Signature is _represented_; it does not add any new inference
-capability. `test/cases/fixes/glimmerComponents/constructorArgs` is a skipped fixture
+capability. `test/cases/fixes/glimmerArgsSignature/constructorArgs` is a skipped fixture
 tracking that future work, pre-encoding the aspirational target
 (`constructor(owner: Owner, args: GreeterSignature['Args'])`) so it can be un-skipped once
 that's designed and implemented.
@@ -28,14 +28,14 @@ the user already chose -- never convert an existing inline literal to a named in
 vice versa." That last clause is reversed. The new rule: **every Signature, existing or new,
 ends up as a named `interface <ComponentName>Signature`.**
 
-| Existing shape                                             | Action                                                                                                                                                                                                                                                                   |
-| ---------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
-| None (`extends Component`)                                 | Unchanged -- already generates a new named interface (original spec's behavior).                                                                                                                                                                                         |
-| `interface <ComponentName>Signature`                       | Unchanged -- patch the member in place (original spec's behavior).                                                                                                                                                                                                       |
-| `interface SomeOtherName`                                  | **New:** rename the declaration _and every same-file reference_ to `<ComponentName>Signature`, then patch the member.                                                                                                                                                    |
-| `type SomeName = { ... }` (object-literal alias, any name) | **New:** convert `type` -> `interface`, renaming to `<ComponentName>Signature` if the name differs, then patch.                                                                                                                                                          |
-| Inline literal in the `extends` clause                     | **New:** extract it into a new `interface <ComponentName>Signature { ... }` declaration immediately above the class (same insertion point as the "no existing Signature" case), preserving its existing members, point the `extends` clause at the new name, then patch. |
-| Anything else (union, intersection, mapped type, etc.)     | Unchanged -- already a no-op today (`resolveSignatureMembersNode` only matches object-literal shapes); out of scope for this revision.                                                                                                                                   |
+| Existing shape                                             | Action                                                                                                                                                                                                                                                                                                                                 |
+| ---------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| None (`extends Component`)                                 | Unchanged -- already generates a new named interface (original spec's behavior).                                                                                                                                                                                                                                                       |
+| `interface <ComponentName>Signature`                       | Unchanged -- patch the member in place (original spec's behavior).                                                                                                                                                                                                                                                                     |
+| `interface SomeOtherName`                                  | **New:** rename the declaration _and every same-file reference_ to `<ComponentName>Signature`, then patch the member. See "Open question: shared/multi-use interfaces" below.                                                                                                                                                          |
+| `type SomeName = { ... }` (object-literal alias, any name) | **New:** convert `type` -> `interface`, renaming to `<ComponentName>Signature` if the name differs, then patch. Emit a warning (`output.stdout`) noting the conversion -- this changes the declaration's kind, which a user may not expect even though it's behavior-preserving.                                                       |
+| Inline literal in the `extends` clause                     | **New:** extract it into a new `interface <ComponentName>Signature { ... }` declaration immediately above the class (same insertion point as the "no existing Signature" case), preserving its existing members, point the `extends` clause at the new name, then patch. Emit the same warning.                                        |
+| Anything else (union, intersection, mapped type, etc.)     | **Changed:** `throw new Error(...)` (-> `MutationsComplaint`), same treatment as the naming-collision and `.gjs`-assumption cases below. Previously a silent no-op; per review feedback, anything this fixer can't resolve into the named-interface shape should say so loudly rather than silently leave the Signature un-normalized. |
 
 ## Renaming mechanism
 
@@ -54,6 +54,31 @@ usage-evidence nodes for other fixers. It wraps
   (as found by `findReferences`) -- both the `extends Component<X>` type-argument reference
   and any other reference to `X` elsewhere in the file (e.g. a helper function typed to
   accept it).
+
+### Open question: shared/multi-use interfaces
+
+**Not yet resolved -- flagged during review, needs a decision before implementation.** The
+rename table row above assumes `SomeOtherName` exists solely to be this component's
+Signature. But `findReferences` will find _every_ in-file reference regardless of why it
+exists -- if `SomeOtherName` is also used as, say, a plain function parameter's type
+elsewhere in the same file (unrelated to being a Signature), renaming it still works
+mechanically (every reference gets updated consistently, nothing breaks type-wise), but
+`<ComponentName>Signature` becomes a misleading name for something that isn't solely that
+component's concern. Options to resolve before this is implemented:
+
+1. Rename unconditionally regardless of other uses (simplest, matches "always converge on
+   the named-interface convention" the review comment asked for; accepts that the name may
+   end up describing something broader than one component).
+2. Detect "this interface is used as more than just this component's Signature type
+   argument" (e.g. any reference that isn't the `extends Component<X>` position itself, or
+   isn't inside this component's own file scope in some other sense) and treat it like a
+   naming collision -- `throw`/complain instead of renaming.
+3. Something narrower still to be defined.
+
+Separately: this only ever arises for a hand-written `.gts` file where a human already gave
+the Signature type a different name -- it's not a case a fresh `.gjs` -> `.gts` conversion
+would ever produce on its own (a freshly-converted file has no existing Signature at all,
+so it goes through the unchanged "no existing Signature" path instead).
 
 ## Naming collision handling
 
@@ -84,10 +109,25 @@ same as a naming collision: `throw new Error(...)`, surfaced as a `MutationsComp
 rather than silently normalizing it (which would still work mechanically, but would compound
 an already-broken file rather than surface it).
 
+## Warning on structural conversion
+
+Converting a `type` alias to an `interface`, or extracting an inline literal into a new
+top-level interface, is behavior-preserving but changes the declaration's kind/location --
+visible enough that a user should be told it happened, even though it's not an error. Emit
+a message via `request.options.output.stdout(...)` (the same channel
+`createCoreMutationsProvider` already uses for wave-progress messages; there's no separate
+"warning" channel in `ProcessOutput` today, and this doesn't need a new one) identifying the
+file and what was converted. This is strictly informational -- it does not block or alter
+the mutation, unlike the `throw`-based guards above.
+
 ## Impact on existing fixtures
 
+**Required, not optional, as part of implementing this revision:**
 `test/cases/fixes/glimmerBlocksSignature/multipleValues/` already exercises the "existing
-inline literal" path today:
+inline literal" path today, and its `expected.gts` must be updated to match the new
+behavior -- this is not a hypothetical future case, it's an existing, currently-passing
+fixture that this change breaks by design. The implementation plan must include updating it
+as an explicit task, not leave it to be discovered as a test failure.
 
 ```ts
 export default class UnorderedList extends Component<{
@@ -99,9 +139,7 @@ Its current `expected.gts` shows the old behavior -- the `Blocks` member patched
 into the inline literal, still untyped-by-name. Once this revision is implemented, that
 fixture's expected output changes: the inline literal gets extracted into a new
 `interface UnorderedListSignature { Args: UnorderedListArgs; Blocks: {...}; }`, and the
-`extends` clause becomes `Component<UnorderedListSignature>`. This is a real, verified
-regression target for the implementation plan -- not a hypothetical -- since this fixture
-already exists and already passes under the old behavior.
+`extends` clause becomes `Component<UnorderedListSignature>`.
 
 No other existing Glimmer fixture (`simpleDiv`, `ariaAttrs`, `namedBlocks`, the four
 `glimmerComponents` smoke tests) has an existing Signature at all, so they're unaffected --
