@@ -144,10 +144,9 @@ describe("patchSignatureMember", () => {
 			"HTMLDivElement",
 		);
 
-		// Run this test once the implementation exists (Step 3) to see the real output,
-		// then confirm the body text below matches -- the interface body is a direct
-		// character-offset splice of the original literal's own text, so exact
-		// whitespace depends on getEndInsertionPoint's existing (unchanged) logic.
+		// The interface body is a direct character-offset splice of the original
+		// literal's own text, so exact whitespace depends on getEndInsertionPoint's
+		// existing logic.
 		expect(applyMutation(sourceText, mutation)).toBe(
 			`interface HighlightSignature { Args: {};\n\tElement: HTMLDivElement;\n }\n\nclass Highlight extends Component<HighlightSignature> {}`,
 		);
