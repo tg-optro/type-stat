@@ -1,5 +1,10 @@
 # Glimmer Signature Inference (`Element` + `Blocks`) -- Design
 
+> **Partially superseded:** the "Shared write path" rule under "## The Two Fixers" below
+> (never convert an existing inline literal/type alias to a named interface) is reversed by
+> [`docs/superpowers/specs/2026-08-05-glimmer-signature-representation-revision-design.md`](2026-08-05-glimmer-signature-representation-revision-design.md).
+> Everything else in this document still governs.
+
 **Date:** 2026-08-03
 **Scope:** subsystems 2 and 3 of the `.gjs`/`.gts` migration effort (see
 `docs/agent/2026-08-03-gjs-to-gts-migration-handoff.md` and
