@@ -13,6 +13,8 @@ exports[`No inferable types > parameters > options 1`] = `
     },
     "filters": [],
     "fixes": {
+      "glimmerBlocksSignature": false,
+      "glimmerElementSignature": false,
       "importExtensions": false,
       "incompleteTypes": false,
       "missingProperties": false,
@@ -31,6 +33,14 @@ exports[`No inferable types > parameters > options 1`] = `
       "<rootDir>/actual.ts"
     ],
     "mutators": [
+      [
+        "fixGlimmerBlocksSignature",
+        null
+      ],
+      [
+        "fixGlimmerElementSignature",
+        null
+      ],
       [
         "fixImportExtensions",
         null
@@ -114,6 +124,8 @@ exports[`No inferable types > property declarations > options 1`] = `
     },
     "filters": [],
     "fixes": {
+      "glimmerBlocksSignature": false,
+      "glimmerElementSignature": false,
       "importExtensions": false,
       "incompleteTypes": false,
       "missingProperties": false,
@@ -132,6 +144,14 @@ exports[`No inferable types > property declarations > options 1`] = `
       "<rootDir>/actual.ts"
     ],
     "mutators": [
+      [
+        "fixGlimmerBlocksSignature",
+        null
+      ],
+      [
+        "fixGlimmerElementSignature",
+        null
+      ],
       [
         "fixImportExtensions",
         null
@@ -215,6 +235,8 @@ exports[`No inferable types > variable declarations > options 1`] = `
     },
     "filters": [],
     "fixes": {
+      "glimmerBlocksSignature": false,
+      "glimmerElementSignature": false,
       "importExtensions": false,
       "incompleteTypes": false,
       "missingProperties": false,
@@ -233,6 +255,14 @@ exports[`No inferable types > variable declarations > options 1`] = `
       "<rootDir>/actual.ts"
     ],
     "mutators": [
+      [
+        "fixGlimmerBlocksSignature",
+        null
+      ],
+      [
+        "fixGlimmerElementSignature",
+        null
+      ],
       [
         "fixImportExtensions",
         null

@@ -58,6 +58,8 @@ export const fillOutRawOptions = ({
 		files: collectFileOptions(rawOptions),
 		filters: collectOptionals(rawOptions.filters),
 		fixes: {
+			glimmerBlocksSignature: false,
+			glimmerElementSignature: false,
 			importExtensions: false,
 			incompleteTypes: false,
 			missingProperties: false,

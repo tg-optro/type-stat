@@ -39,4 +39,29 @@ describe("getNewFileName", () => {
 			expect(actual).toBe(`path/name${extension}`);
 		},
 	);
+
+	it.each([
+		{ renameExtensions: true as const },
+		{ renameExtensions: "ts" as const },
+		{ renameExtensions: "tsx" as const },
+	])(
+		"returns a .gts path when the old file is .gjs and renameExtensions is $renameExtensions",
+		async ({ renameExtensions }) => {
+			const actual = await getNewFileName(
+				renameExtensions,
+				"path/name.gjs",
+				vi.fn(),
+			);
+
+			expect(actual).toBe("path/name.gts");
+		},
+	);
+
+	it("does not read file contents when the old file is .gjs", async () => {
+		const readFile = vi.fn();
+
+		await getNewFileName(true, "path/name.gjs", readFile);
+
+		expect(readFile).not.toHaveBeenCalled();
+	});
 });

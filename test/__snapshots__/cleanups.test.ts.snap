@@ -13,6 +13,8 @@ exports[`Cleanups > non-TypeErrors > options 1`] = `
     },
     "filters": [],
     "fixes": {
+      "glimmerBlocksSignature": false,
+      "glimmerElementSignature": false,
       "importExtensions": false,
       "incompleteTypes": false,
       "missingProperties": false,
@@ -31,6 +33,14 @@ exports[`Cleanups > non-TypeErrors > options 1`] = `
       "<rootDir>/actual.ts"
     ],
     "mutators": [
+      [
+        "fixGlimmerBlocksSignature",
+        null
+      ],
+      [
+        "fixGlimmerElementSignature",
+        null
+      ],
       [
         "fixImportExtensions",
         null
@@ -121,6 +131,8 @@ exports[`Cleanups > suppressTypeErrors > options 1`] = `
     },
     "filters": [],
     "fixes": {
+      "glimmerBlocksSignature": false,
+      "glimmerElementSignature": false,
       "importExtensions": false,
       "incompleteTypes": false,
       "missingProperties": false,
@@ -139,6 +151,14 @@ exports[`Cleanups > suppressTypeErrors > options 1`] = `
       "<rootDir>/actual.ts"
     ],
     "mutators": [
+      [
+        "fixGlimmerBlocksSignature",
+        null
+      ],
+      [
+        "fixGlimmerElementSignature",
+        null
+      ],
       [
         "fixImportExtensions",
         null

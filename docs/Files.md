@@ -93,6 +93,11 @@ This field has four potential allowed configurations:
   }
   ```
 
+`.gjs` files are always renamed to `.gts`, regardless of which of the above
+four settings is active -- a Glimmer-template-carrying file can only ever
+have a `.gts` counterpart, since plain `.ts`/`.tsx` cannot contain a
+`<template>` tag.
+
 When auto-detection is enabled, a file will be converted to `.tsx` if either of the following is true:
 
 - It `import`s or `require`s from the `"react"` module

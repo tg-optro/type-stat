@@ -13,6 +13,8 @@ exports[`Infinite wave detection > options 1`] = `
     },
     "filters": [],
     "fixes": {
+      "glimmerBlocksSignature": false,
+      "glimmerElementSignature": false,
       "importExtensions": false,
       "incompleteTypes": false,
       "missingProperties": false,

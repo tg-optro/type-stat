@@ -2,6 +2,7 @@ import chalk from "chalk";
 import * as fs from "node:fs/promises";
 
 import { pluralize } from "../../../output/pluralize.js";
+import { isGlimmerFile } from "../../../services/glimmer/index.js";
 import { createSingleUseProvider } from "../../createSingleUseProvider.js";
 import { getNewFileName } from "./getNewFileName.js";
 
@@ -15,8 +16,12 @@ export const createFileRenamesProvider = (allModifiedFiles: Set<string>) => {
 		"Renaming files from JavaScript to TypeScript",
 		(options) => {
 			// If the options don't specify to rename extension, only make sure no JS files are included
+			// .gjs is exempt: TypeStat annotates it in place via Glimmer support, so it never needs renaming to be usable
 			if (!options.files.renameExtensions) {
-				const jsFileNames = options.fileNames.filter(fileNameIsJavaScript);
+				const jsFileNames = options.fileNames.filter(
+					(fileName) =>
+						fileNameIsJavaScript(fileName) && !isGlimmerFile(fileName),
+				);
 				if (jsFileNames.length === 0) {
 					return undefined;
 				}
@@ -78,7 +83,7 @@ export const createFileRenamesProvider = (allModifiedFiles: Set<string>) => {
 	);
 };
 
-const javaScriptExtensionMatcher = /\.(?:c|m)?jsx?/i;
+const javaScriptExtensionMatcher = /\.[cgm]?jsx?/i;
 
-const fileNameIsJavaScript = (fileName: string) =>
+export const fileNameIsJavaScript = (fileName: string) =>
 	javaScriptExtensionMatcher.test(fileName);

@@ -1,13 +1,16 @@
 /* eslint-disable @typescript-eslint/unbound-method */
+import { type TransformedModule } from "@glint/ember-tsc/transform";
 import ts from "typescript";
 
 import { TypeStatOptions } from "../options/types.js";
 import { arrayify, uniquify } from "../shared/arrays.js";
+import { computeGlimmerTransform, isGlimmerFile } from "./glimmer/index.js";
 
 /**
  * Language service and type information with their backing TypeScript configuration.
  */
 export interface LanguageServices {
+	readonly glimmerTransforms: ReadonlyMap<string, TransformedModule>;
 	readonly languageService: ts.LanguageService;
 	readonly printers: Printers;
 	readonly program: ts.Program;
@@ -28,11 +31,46 @@ export interface Printers {
 export const createLanguageServices = (
 	options: TypeStatOptions,
 ): LanguageServices => {
+	const glimmerTransforms = new Map<string, TransformedModule>();
+
+	const getFileContents = (fileName: string): string | undefined => {
+		const rawContents = ts.sys.readFile(fileName);
+		if (rawContents === undefined || !isGlimmerFile(fileName)) {
+			return rawContents;
+		}
+
+		const cached = glimmerTransforms.get(fileName);
+		if (cached !== undefined) {
+			return cached.transformedContents;
+		}
+
+		const transformed = computeGlimmerTransform(
+			fileName,
+			rawContents,
+			options.package.directory,
+		);
+		if (transformed === null) {
+			return rawContents;
+		}
+
+		glimmerTransforms.set(fileName, transformed);
+		return transformed.transformedContents;
+	};
+
+	// TypeScript's Program rejects root files whose extension it doesn't recognize
+	// (.gts, .gjs) before scriptKind is ever consulted, unless allowNonTsExtensions is
+	// set -- the same thing tsserver itself sets automatically once extraFileExtensions
+	// declares a Deferred script kind (see ts's hasDeferredExtension/allowNonTsExtensions).
+	const compilationSettings: ts.CompilerOptions = {
+		...options.parsedTsConfig.options,
+		allowNonTsExtensions: true,
+	};
+
 	// Create a TypeScript language service
 	const languageServiceHost: ts.LanguageServiceHost = {
 		directoryExists: ts.sys.directoryExists,
 		fileExists: ts.sys.fileExists,
-		getCompilationSettings: () => options.parsedTsConfig.options,
+		getCompilationSettings: () => compilationSettings,
 		getCurrentDirectory: () => options.package.directory,
 		getDefaultLibFileName: ts.getDefaultLibFilePath,
 		getDirectories: ts.sys.getDirectories,
@@ -40,11 +78,16 @@ export const createLanguageServices = (
 		getScriptFileNames: () => options.parsedTsConfig.fileNames,
 		getScriptSnapshot: (fileName) =>
 			ts.sys.fileExists(fileName)
-				? ts.ScriptSnapshot.fromString(ts.sys.readFile(fileName) ?? "")
+				? ts.ScriptSnapshot.fromString(getFileContents(fileName) ?? "")
 				: undefined,
 		getScriptVersion: () => "0",
 		readDirectory: ts.sys.readDirectory,
-		readFile: ts.sys.readFile,
+		readFile: getFileContents,
+		// Without this, TypeScript can't see through pnpm's symlinked node_modules layout
+		// when resolving a package's own nested dependencies (e.g. @glint/ember-tsc's
+		// package.json "exports" pointing into @glint/template), and silently resolves
+		// re-exported members to `any`.
+		realpath: ts.sys.realpath,
 	};
 	const languageService = ts.createLanguageService(languageServiceHost);
 
@@ -80,6 +123,7 @@ export const createLanguageServices = (
 	};
 
 	return {
+		glimmerTransforms,
 		languageService,
 		printers,
 		program,

@@ -2,6 +2,7 @@ import path from "node:path";
 import ts from "typescript";
 
 import { createParseConfigHost } from "../services/createParseConfigHost.js";
+import { glimmerFileExtensionInfos } from "../services/glimmer/index.js";
 import { stringifyDiagnosticMessageText } from "../shared/diagnostics.js";
 
 export const parseRawCompilerOptions = (
@@ -12,6 +13,9 @@ export const parseRawCompilerOptions = (
 		path.resolve(cwd, projectPath),
 		undefined,
 		createParseConfigHost(cwd),
+		undefined,
+		undefined,
+		glimmerFileExtensionInfos,
 	);
 
 	if (!configFile) {

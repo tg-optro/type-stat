@@ -13,6 +13,8 @@ exports[`Custom mutators > empty array > options 1`] = `
     },
     "filters": [],
     "fixes": {
+      "glimmerBlocksSignature": false,
+      "glimmerElementSignature": false,
       "importExtensions": false,
       "incompleteTypes": false,
       "missingProperties": false,
@@ -31,6 +33,14 @@ exports[`Custom mutators > empty array > options 1`] = `
       "<rootDir>/actual.ts"
     ],
     "mutators": [
+      [
+        "fixGlimmerBlocksSignature",
+        null
+      ],
+      [
+        "fixGlimmerElementSignature",
+        null
+      ],
       [
         "fixImportExtensions",
         null
@@ -112,6 +122,8 @@ exports[`Custom mutators > one mutator > options 1`] = `
     },
     "filters": [],
     "fixes": {
+      "glimmerBlocksSignature": false,
+      "glimmerElementSignature": false,
       "importExtensions": false,
       "incompleteTypes": false,
       "missingProperties": false,
@@ -187,6 +199,8 @@ exports[`Custom mutators > two mutators > options 1`] = `
     },
     "filters": [],
     "fixes": {
+      "glimmerBlocksSignature": false,
+      "glimmerElementSignature": false,
       "importExtensions": false,
       "incompleteTypes": false,
       "missingProperties": false,

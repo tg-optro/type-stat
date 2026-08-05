@@ -1,0 +1,382 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`Glimmer Blocks Signature > infers a Blocks member per named block, alongside the default block > options 1`] = `
+"[
+  {
+    "cleanups": {
+      "suppressTypeErrors": false
+    },
+    "files": {
+      "above": "",
+      "below": "",
+      "renameExtensions": false
+    },
+    "filters": [],
+    "fixes": {
+      "glimmerBlocksSignature": true,
+      "glimmerElementSignature": false,
+      "importExtensions": false,
+      "incompleteTypes": false,
+      "missingProperties": false,
+      "noImplicitAny": false,
+      "noImplicitThis": false,
+      "noInferableTypes": false,
+      "strictNonNullAssertions": false
+    },
+    "hints": {
+      "react": {
+        "propTypes": "whenRequired",
+        "propTypesOptionality": "asWritten"
+      }
+    },
+    "include": [
+      "<rootDir>/actual.gts"
+    ],
+    "mutators": [
+      [
+        "fixGlimmerBlocksSignature",
+        null
+      ],
+      [
+        "fixGlimmerElementSignature",
+        null
+      ],
+      [
+        "fixImportExtensions",
+        null
+      ],
+      [
+        "fixIncompleteTypes",
+        null
+      ],
+      [
+        "fixMissingProperties",
+        null
+      ],
+      [
+        "fixNoImplicitAny",
+        null
+      ],
+      [
+        "fixNoImplicitThis",
+        null
+      ],
+      [
+        "fixNoInferableTypes",
+        null
+      ],
+      [
+        "fixStrictNonNullAssertions",
+        null
+      ]
+    ],
+    "output": {},
+    "package": {
+      "directory": "<rootDir>",
+      "file": "<rootDir>/package.json"
+    },
+    "parsedTsConfig": {
+      "options": {
+        "module": 99,
+        "moduleResolution": 100,
+        "strict": true,
+        "target": 9,
+        "types": [
+          "ember-source/types"
+        ],
+        "configFilePath": "<rootDir>/tsconfig.json",
+        "noEmit": true,
+        "noImplicitAny": true,
+        "noImplicitThis": true,
+        "strictNullChecks": true
+      },
+      "fileNames": [
+        "<rootDir>/actual.gts"
+      ],
+      "typeAcquisition": {
+        "enable": false,
+        "include": [],
+        "exclude": []
+      },
+      "raw": {
+        "compilerOptions": {
+          "module": "esnext",
+          "moduleResolution": "bundler",
+          "strict": true,
+          "target": "ES2022",
+          "types": [
+            "ember-source/types"
+          ]
+        },
+        "files": [
+          "actual.gts"
+        ]
+      },
+      "errors": [],
+      "wildcardDirectories": {},
+      "compileOnSave": false
+    },
+    "postProcess": {
+      "shell": []
+    },
+    "projectPath": "<rootDir>/tsconfig.json",
+    "types": {
+      "strictNullChecks": true
+    }
+  }
+]"
+`;
+
+exports[`Glimmer Blocks Signature > infers the Blocks member from a named yield > options 1`] = `
+"[
+  {
+    "cleanups": {
+      "suppressTypeErrors": false
+    },
+    "files": {
+      "above": "",
+      "below": "",
+      "renameExtensions": false
+    },
+    "filters": [],
+    "fixes": {
+      "glimmerBlocksSignature": true,
+      "glimmerElementSignature": false,
+      "importExtensions": false,
+      "incompleteTypes": false,
+      "missingProperties": false,
+      "noImplicitAny": false,
+      "noImplicitThis": false,
+      "noInferableTypes": false,
+      "strictNonNullAssertions": false
+    },
+    "hints": {
+      "react": {
+        "propTypes": "whenRequired",
+        "propTypesOptionality": "asWritten"
+      }
+    },
+    "include": [
+      "<rootDir>/actual.gts"
+    ],
+    "mutators": [
+      [
+        "fixGlimmerBlocksSignature",
+        null
+      ],
+      [
+        "fixGlimmerElementSignature",
+        null
+      ],
+      [
+        "fixImportExtensions",
+        null
+      ],
+      [
+        "fixIncompleteTypes",
+        null
+      ],
+      [
+        "fixMissingProperties",
+        null
+      ],
+      [
+        "fixNoImplicitAny",
+        null
+      ],
+      [
+        "fixNoImplicitThis",
+        null
+      ],
+      [
+        "fixNoInferableTypes",
+        null
+      ],
+      [
+        "fixStrictNonNullAssertions",
+        null
+      ]
+    ],
+    "output": {},
+    "package": {
+      "directory": "<rootDir>",
+      "file": "<rootDir>/package.json"
+    },
+    "parsedTsConfig": {
+      "options": {
+        "module": 99,
+        "moduleResolution": 100,
+        "strict": true,
+        "target": 9,
+        "types": [
+          "ember-source/types"
+        ],
+        "configFilePath": "<rootDir>/tsconfig.json",
+        "noEmit": true,
+        "noImplicitAny": true,
+        "noImplicitThis": true,
+        "strictNullChecks": true
+      },
+      "fileNames": [
+        "<rootDir>/actual.gts"
+      ],
+      "typeAcquisition": {
+        "enable": false,
+        "include": [],
+        "exclude": []
+      },
+      "raw": {
+        "compilerOptions": {
+          "module": "esnext",
+          "moduleResolution": "bundler",
+          "strict": true,
+          "target": "ES2022",
+          "types": [
+            "ember-source/types"
+          ]
+        },
+        "files": [
+          "actual.gts"
+        ]
+      },
+      "errors": [],
+      "wildcardDirectories": {},
+      "compileOnSave": false
+    },
+    "postProcess": {
+      "shell": []
+    },
+    "projectPath": "<rootDir>/tsconfig.json",
+    "types": {
+      "strictNullChecks": true
+    }
+  }
+]"
+`;
+
+exports[`Glimmer Blocks Signature > renames a differently-named existing Signature interface and its references > options 1`] = `
+"[
+  {
+    "cleanups": {
+      "suppressTypeErrors": false
+    },
+    "files": {
+      "above": "",
+      "below": "",
+      "renameExtensions": false
+    },
+    "filters": [],
+    "fixes": {
+      "glimmerBlocksSignature": true,
+      "glimmerElementSignature": true,
+      "importExtensions": true,
+      "incompleteTypes": true,
+      "missingProperties": true,
+      "noImplicitAny": true,
+      "noImplicitThis": true,
+      "noInferableTypes": true,
+      "strictNonNullAssertions": true
+    },
+    "hints": {
+      "react": {
+        "propTypes": "whenRequired",
+        "propTypesOptionality": "asWritten"
+      }
+    },
+    "include": [
+      "<rootDir>/actual.gts"
+    ],
+    "mutators": [
+      [
+        "fixGlimmerBlocksSignature",
+        null
+      ],
+      [
+        "fixGlimmerElementSignature",
+        null
+      ],
+      [
+        "fixImportExtensions",
+        null
+      ],
+      [
+        "fixIncompleteTypes",
+        null
+      ],
+      [
+        "fixMissingProperties",
+        null
+      ],
+      [
+        "fixNoImplicitAny",
+        null
+      ],
+      [
+        "fixNoImplicitThis",
+        null
+      ],
+      [
+        "fixNoInferableTypes",
+        null
+      ],
+      [
+        "fixStrictNonNullAssertions",
+        null
+      ]
+    ],
+    "output": {},
+    "package": {
+      "directory": "<rootDir>",
+      "file": "<rootDir>/package.json"
+    },
+    "parsedTsConfig": {
+      "options": {
+        "module": 99,
+        "moduleResolution": 100,
+        "strict": true,
+        "target": 9,
+        "types": [
+          "ember-source/types"
+        ],
+        "configFilePath": "<rootDir>/tsconfig.json",
+        "noEmit": true,
+        "noImplicitAny": true,
+        "noImplicitThis": true,
+        "strictNullChecks": true
+      },
+      "fileNames": [
+        "<rootDir>/actual.gts"
+      ],
+      "typeAcquisition": {
+        "enable": false,
+        "include": [],
+        "exclude": []
+      },
+      "raw": {
+        "compilerOptions": {
+          "module": "esnext",
+          "moduleResolution": "bundler",
+          "strict": true,
+          "target": "ES2022",
+          "types": [
+            "ember-source/types"
+          ]
+        },
+        "files": [
+          "actual.gts"
+        ]
+      },
+      "errors": [],
+      "wildcardDirectories": {},
+      "compileOnSave": false
+    },
+    "postProcess": {
+      "shell": []
+    },
+    "projectPath": "<rootDir>/tsconfig.json",
+    "types": {
+      "strictNullChecks": true
+    }
+  }
+]"
+`;

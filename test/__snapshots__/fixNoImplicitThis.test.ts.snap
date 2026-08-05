@@ -13,6 +13,8 @@ exports[`noImplicitThis > noImplicitThis > options 1`] = `
     },
     "filters": [],
     "fixes": {
+      "glimmerBlocksSignature": false,
+      "glimmerElementSignature": false,
       "importExtensions": false,
       "incompleteTypes": false,
       "missingProperties": false,
@@ -31,6 +33,14 @@ exports[`noImplicitThis > noImplicitThis > options 1`] = `
       "<rootDir>/actual.ts"
     ],
     "mutators": [
+      [
+        "fixGlimmerBlocksSignature",
+        null
+      ],
+      [
+        "fixGlimmerElementSignature",
+        null
+      ],
       [
         "fixImportExtensions",
         null
