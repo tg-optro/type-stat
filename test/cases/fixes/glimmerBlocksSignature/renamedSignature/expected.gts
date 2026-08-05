@@ -9,7 +9,7 @@ Blocks: {
 };
 }
 
-function describeArgs(args: UnorderedListSignature): string {
+function describeArgs(args: UnorderedListSignature["Args"]): string {
 	return args.items.join(", ");
 }
 

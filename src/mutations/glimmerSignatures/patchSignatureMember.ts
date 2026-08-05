@@ -3,6 +3,7 @@ import ts from "typescript";
 
 import { FileMutationsRequest } from "../../shared/fileMutator.js";
 import { getStaticNameOfProperty } from "../../shared/names.js";
+import { narrowToInnermostNodeAtSameStart } from "../../shared/nodes.js";
 import {
 	isNodeWithType,
 	PropertySignatureWithType,
@@ -312,9 +313,22 @@ const createReferenceRenameMutations = (
 	const referencingNodes =
 		request.fileInfoCache.getNodeReferencesAsNodes(nameNode) ?? [];
 
-	return referencingNodes.map((node) =>
-		textSwap(targetName, node.getStart(request.sourceFile), node.end),
-	);
+	return referencingNodes.map((node) => {
+		// The reference lookup can return an ancestor of the identifier itself
+		// (e.g. the whole `Foo["bar"]` IndexedAccessTypeNode when renaming `Foo`),
+		// since it shares that ancestor's start position. Narrow down to the
+		// identifier so the rename doesn't also swallow a trailing `["bar"]`.
+		const identifierNode = narrowToInnermostNodeAtSameStart(
+			request.sourceFile,
+			node,
+		);
+
+		return textSwap(
+			targetName,
+			identifierNode.getStart(request.sourceFile),
+			identifierNode.end,
+		);
+	});
 };
 
 const ensureNoNameCollision = (

@@ -34,6 +34,38 @@ export const findNodeByStartingPosition = (
 };
 
 /**
+ * Narrows a node down to its most specific (innermost) descendant that still
+ * starts at the exact same source position.
+ *
+ * Several sibling-nested node kinds can share their leftmost token's start
+ * position with an ancestor -- e.g. in `Foo["bar"]`, the `IndexedAccessTypeNode`,
+ * its `objectType` `TypeReferenceNode`, and that `TypeReferenceNode`'s `typeName`
+ * `Identifier` all start at the same offset. `findNodeByStartingPosition` (and
+ * anything built on it, like reference lookups) intentionally returns the
+ * outermost such node, since most callers want the surrounding statement or
+ * expression. Callers that specifically need the identifier-level node itself
+ * -- for example, to safely rename just that identifier without also
+ * overwriting a trailing `["bar"]` -- should narrow down to it with this
+ * helper instead of assuming the node returned is already an `Identifier`.
+ */
+export const narrowToInnermostNodeAtSameStart = (
+	sourceFile: ts.SourceFile,
+	node: ts.Node,
+): ts.Node => {
+	const start = node.getStart(sourceFile);
+
+	const visitNode = (candidate: ts.Node): ts.Node | undefined => {
+		if (candidate.getStart(sourceFile) !== start) {
+			return undefined;
+		}
+
+		return ts.forEachChild(candidate, visitNode) ?? candidate;
+	};
+
+	return visitNode(node) ?? node;
+};
+
+/**
  * Checks whether a node's position is completely within a parent node's.
  */
 export const isNodeWithinNode = (
