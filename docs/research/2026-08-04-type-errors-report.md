@@ -24,7 +24,10 @@ scratch-repro paths cited under each table for where to reproduce a claim yourse
      TypeScript diagnostic code at all. This is what `fixIncompleteTypes`,
      `fixNoInferableTypes`, `fixStrictNonNullAssertions`, and the two Glimmer Signature
      fixers actually do. `fixImportExtensions` is a third, even simpler case: pure
-     string/filesystem manipulation, no type information consulted at all.
+     string/filesystem manipulation, no type information consulted at all. §8 proves this
+     isn't just an unused capability: four compiled cases (widening from a distant call
+     site, stripping a redundant annotation, stripping a redundant `!`, and the Glimmer
+     `Element` Signature gap) that mechanism A cannot reach regardless of configuration.
 - Across the entire codebase, only **4 numeric TypeScript diagnostic codes** are ever
   hardcoded: `7005`, `7006`, `2683`, `2339`. Everything else TypeStat fixes, it fixes without
   ever checking a diagnostic code.
@@ -338,7 +341,113 @@ construction, not by oversight:
   `.mts`/`.cts` syntax-restriction errors: narrow, config-dependent domains TypeStat has
   never targeted.
 
-## 8. Rollup
+## 8. Concrete proof: what direct type-checker inference reaches that diagnostic-code delegation structurally cannot
+
+§2.3 asserted that mechanism B (direct type-checker inference) solves real problems
+mechanism A (diagnostic-code delegation) could never reach, "regardless of what TypeStat's
+own code does." That's a strong claim, so here are four compiled, verified cases proving it
+— not just "TypeStat doesn't currently watch this code," but "no diagnostic-code-delegation
+fixer, however configured, could ever fix this."
+
+### 8.1 The diagnostic lands on a different node than the one that needs fixing
+
+```ts
+function receive(value: string): void {
+	console.log(value);
+}
+
+receive("" as null | string);
+```
+
+Compiled with `tsc --strict --noImplicitAny`, this produces exactly one diagnostic:
+
+```
+widen.ts(5,9): error TS2345: Argument of type 'string | null' is not assignable to
+parameter of type 'string'.
+```
+
+That's on line 5 — the call site — not line 1, the `value: string` parameter declaration
+`fixIncompleteTypes` would need to widen to `string | null`. `getCodeFixIfMatchedByDiagnostic`
+requires the diagnostic to fall within the _target node's_ own span
+(`diagnostic.start >= node.pos && diagnostic.start + diagnostic.length <= node.end`); a
+mechanism-A fixer gating on the parameter node would check `node.pos`–`node.end` for the
+`value: string` declaration and find nothing there, ever, for this shape of problem —
+independent of which error code it asked for. `fixIncompleteTypes` reaches this because it
+never checks a diagnostic at all: it directly compares the declared type against types
+observed at usage sites (any usage site, anywhere), and constructs the widened type text
+itself.
+
+### 8.2 No diagnostic exists anywhere, for any code
+
+```ts
+// eslint-disable-next-line @typescript-eslint/no-inferrable-types -- illustrating the exact redundancy fixNoInferableTypes removes
+const count: number = 5;
+```
+
+Compiles with **zero diagnostics** under `--strict --noImplicitAny` — TypeScript is
+completely satisfied with a redundant type annotation. Yet `fixNoInferableTypes` correctly
+removes the `: number` here (it's exactly the scenario in its own test fixtures). There is no
+diagnostic code that could ever gate this fix, because TypeScript doesn't consider a
+redundant-but-correct annotation an error at all. Same story for
+`fixStrictNonNullAssertions` removing an unnecessary `!`:
+
+```ts
+function f(value: string) {
+	// eslint-disable-next-line @typescript-eslint/no-non-null-assertion -- illustrating the exact redundancy fixStrictNonNullAssertions removes
+	return value!.length; // value is already non-null; the `!` is redundant
+}
+```
+
+Also zero diagnostics. Both fixers work by asking the type checker directly "is this
+assertion/annotation actually necessary," a question TypeScript's own diagnostics never ask.
+
+### 8.3 The diagnostic exists, but it's the wrong kind of tool
+
+The Glimmer Signature gap turned out to be more interesting than "no diagnostic exists" —
+worth correcting here rather than asserting it cleanly matched the first case. Given
+`test/cases/fixes/glimmerElementSignature/simpleDiv/original.gts`:
+
+```
+
+import Component from "@glimmer/component";
+
+export default class SimpleDiv extends Component {
+	<template>
+		<div ...attributes>Hello</div>
+	</template>
+}
+
+```
+
+Building the real `LanguageServices` TypeStat itself builds for this file (Glint's
+`transformedContents`, not raw text) and asking for semantic diagnostics produces exactly
+one:
+
+```
+TS2345: Argument of type 'unknown' is not assignable to parameter of type 'Element'.
+```
+
+anchored on the desugared `applySplattributes(__glintRef__.element, ...)` call Glint
+generates for `...attributes` — because with no `Signature` at all, `Element` defaults to
+`unknown`. So a diagnostic genuinely exists. But asking `getCodeFixesAtPosition` for it,
+exactly as `getCodeFixIfMatchedByDiagnostic` would, returns **`[]`** — verified directly,
+same as the `7023` finding in §3.1. Two independent reasons mechanism A still can't reach
+this, even though step one (a real diagnostic) is satisfied:
+
+1. `2345` ("argument not assignable") is one of the most generic diagnostic codes in the
+   entire compiler, emitted for essentially any type mismatch anywhere in a program. Gating
+   a fixer on it directly, the way `fixNoImplicitThis` safely gates on the narrow `2683`,
+   would misfire constantly on unrelated assignability errors throughout a codebase.
+2. It's anchored to synthetic scaffolding (`applySplattributes(...)`) that only exists in
+   Glint's transformed output — not a position a human ever wrote, and not something a
+   generic code-fix, even if one existed, could sensibly edit.
+
+`fixGlimmerElementSignature` reaches this the same way `fixIncompleteTypes` reaches §8.1:
+it never asks for a diagnostic. It walks the desugared `applySplattributes` call directly,
+reads the argument type via the type checker, and writes a `Signature`/interface member
+based on what it finds — independent of whether TypeScript itself ever complained.
+
+## 9. Rollup
 
 | Bucket                                                                               | Count            | Codes                                                              |
 | ------------------------------------------------------------------------------------ | ---------------- | ------------------------------------------------------------------ |
@@ -355,7 +464,7 @@ fixes (§5) doesn't go through that mechanism at all. The one real, confirmed bu
 instead of `7008` for properties) is the only case in this report where TypeStat _claims_ to
 cover a code it doesn't actually reach.
 
-## 9. Where this data lives
+## 10. Where this data lives
 
 Raw TSVs backing §6 and the `getSupportedCodeFixes()` claim in §3.1 (all Error-category
 diagnostics, the full supported-codefixes list, and the implicit-any family with both
